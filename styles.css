@@ -1,31 +1,119 @@
 /* styles.css */
 
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto&family=Bangers&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 2rem;
-    background-color: #f4f4f4;
-    color: #333;
+  margin: 0;
+  padding: 40px 20px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #2e2e2e;
+  color: #f0f0f0;
+  text-align: justify;
+}
+
+h1, h2 {
+  text-align: center;
+  font-family: 'Anton', sans-serif;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+  margin: 20px 0;
+}
+
+p {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #f0f0f0;
+}
+
+a {
+  color: #90caf9;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Character List Page Styles */
+.character-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.character-link {
+  font-size: 2em;
+  font-weight: bold;
+  padding: 10px 25px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+/* Batman Colors */
+.batman {
+  color: black;
+  background-color: #fdd835;
+}
+
+.batman:hover {
+  background-color: #ffc107;
+}
+
+/* Sasuke Colors */
+.sasuke {
+  color: #6a1b9a;
+  background-color: #bdbdbd;
+}
+
+.sasuke:hover {
+  background-color: #ce93d8;
+}
+
+/* Image Float Utility Classes */
+.image-left {
+  float: left;
+  margin: 10px 20px 20px 0;
+  width: 220px !important;
+  height: auto !important;
+  clear: both;
+}
+
+.image-right {
+  float: right;
+  margin: 20px 0 20px 20px;
+  width: 220px !important;
+  height: auto !important;
+  clear: both;
+}
+
+.image-bottom-left {
+  float: left;
+  margin: 20px 20px 0 0;
+  width: 220px !important;
+  clear: both;
+  height: auto !important;
+}
+
+/* === Sasuke Page Overrides === */
+body.sasuke-page {
+    background-color: #f3e5f5 !important;
+    font-family: 'Bangers', cursive !important;
+    color: #222 !important;
   }
   
-  h1 {
-    color: #222;
+  body.sasuke-page p {
+    font-family: Arial, sans-serif !important;
+    color: #222 !important;
   }
   
-  ul {
-    list-style-type: none;
-    padding: 0;
+  body.sasuke-page h1,
+  body.sasuke-page h2 {
+    color: #222 !important;
   }
-  
-  li {
-    margin: 10px 0;
-  }
-  
-  a {
-    text-decoration: none;
-    color: #0066cc;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  

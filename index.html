@@ -1,16 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Favorite Characters</title>
+  <meta charset="UTF-8" />
+  <title>Characters</title>
   <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #2e2e2e; /* dark grey */
+      font-family: Arial, sans-serif;
+      color: white;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3.5em;
+      font-weight: bold;
+      margin-bottom: 60px;
+      color: white;
+      font-family: 'Anton', sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .character-list {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .character-link {
+      text-decoration: none;
+      font-size: 2em;
+      font-weight: bold;
+      padding: 10px 25px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      width: fit-content;
+    }
+
+    .batman {
+      color: black;
+      background-color: #fdd835; /* Yellow */
+    }
+
+    .batman:hover {
+      background-color: #ffc107;
+    }
+
+    .sasuke {
+      color: #6a1b9a; /* Purple */
+      background-color: #bdbdbd; /* Light grey */
+    }
+
+    .sasuke:hover {
+      background-color: #ce93d8;
+    }
+  </style>
 </head>
 <body>
-  <h1>Character Index</h1>
-  <ul>
-<li><a href="characters/batman.html">Batman</a></li>
-<li><a href="characters/sasuke.html">Sasuke</a></li>
-  </ul>
+  <h1>Characters</h1>
+
+  <div class="character-list">
+    <a href="characters/batman.html" class="character-link batman">Batman</a>
+    <a href="characters/sasuke.html" class="character-link sasuke">Sasuke Uchiha</a>
+  </div>
 </body>
 </html>
