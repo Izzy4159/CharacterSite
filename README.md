@@ -51,6 +51,7 @@ Welcome to the **Character Showcase Site**, a simple, fast, and visually themed 
 
 ## 🗂️ Project Structure
 
+```plaintext
 character-showcase/
 ├── index.html            # Main homepage with character links
 ├── styles.css            # Global and themed CSS styles
@@ -58,6 +59,7 @@ character-showcase/
 └── characters/
     ├── batman.html       # Batman’s profile page
     └── sasuke.html       # Sasuke Uchiha’s profile page
+```
 
 ## 🎨 Adding More Characters
 
