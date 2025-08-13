@@ -1,119 +1,179 @@
 /* styles.css */
 
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto&family=Bangers&display=swap');
+/* Global */
+:root {
+  --bg: #2e2e2e;
+  --text: #f0f0f0;
+  --link: #90caf9;
+  --spacing: 40px;
+}
+
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  padding: 40px 20px;
-  font-family: 'Roboto', sans-serif;
-  background-color: #2e2e2e;
-  color: #f0f0f0;
-  text-align: justify;
+  padding: var(--spacing) 20px;
+  font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 h1, h2 {
   text-align: center;
-  font-family: 'Anton', sans-serif;
-  font-weight: bold;
-  color: white;
+  font-family: 'Anton', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: 400;
+  color: #fff;
   letter-spacing: 1px;
   margin: 20px 0;
 }
 
 p {
-  font-family: Arial, sans-serif;
   line-height: 1.6;
-  margin-bottom: 20px;
+  margin: 0 0 1rem;
   font-size: 16px;
-  color: #f0f0f0;
 }
 
 a {
-  color: #90caf9;
+  color: var(--link);
   text-decoration: none;
 }
+a:hover { text-decoration: underline; }
 
-a:hover {
-  text-decoration: underline;
+/* Index page */
+.index-page .character-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  place-items: center;
+  margin-top: 32px;
 }
 
-/* Character List Page Styles */
-.character-list {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 40px;
+@media (min-width: 640px) {
+  .index-page .character-list {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    gap: 20px;
+  }
 }
 
 .character-link {
-  font-size: 2em;
-  font-weight: bold;
-  padding: 10px 25px;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  width: fit-content;
+  display: inline-block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 12px;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+  will-change: transform;
 }
+.character-link:hover { transform: translateY(-1px); }
 
-/* Batman Colors */
-.batman {
-  color: black;
-  background-color: #fdd835;
+/* Themes (menu buttons) */
+.batman { color: #000; background-color: #fdd835; }
+.batman:hover { background-color: #ffc107; }
+
+.sasuke { color: #6a1b9a; background-color: #bdbdbd; }
+.sasuke:hover { background-color: #ce93d8; }
+
+/* Master Chief (green + black) */
+.masterchief { color: #000; background-color: #00e676; }
+.masterchief:hover { background-color: #00c853; }
+
+/* Float utilities (with CLS prevention: set width in HTML) */
+.image-left, .image-right, .image-bottom-left {
+  width: 220px;
+  height: auto;
 }
-
-.batman:hover {
-  background-color: #ffc107;
-}
-
-/* Sasuke Colors */
-.sasuke {
-  color: #6a1b9a;
-  background-color: #bdbdbd;
-}
-
-.sasuke:hover {
-  background-color: #ce93d8;
-}
-
-/* Image Float Utility Classes */
 .image-left {
   float: left;
   margin: 10px 20px 20px 0;
-  width: 220px !important;
-  height: auto !important;
   clear: both;
 }
-
 .image-right {
   float: right;
   margin: 20px 0 20px 20px;
-  width: 220px !important;
-  height: auto !important;
   clear: both;
 }
-
 .image-bottom-left {
   float: left;
   margin: 20px 20px 0 0;
-  width: 220px !important;
   clear: both;
-  height: auto !important;
 }
 
-/* === Sasuke Page Overrides === */
+/* Sasuke page overrides */
 body.sasuke-page {
-    background-color: #f3e5f5 !important;
-    font-family: 'Bangers', cursive !important;
-    color: #222 !important;
+  background-color: #f3e5f5;
+  color: #222;
+  /* Keep headings in Anton, body stays Roboto for readability/perf */
+}
+body.sasuke-page h1, body.sasuke-page h2 { color: #222; }
+
+/* === Bottom-center orange CTA button (global) === */
+.cta-btn {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 9999;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 16px 28px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .3px;
+
+  color: #111;
+  background: linear-gradient(180deg, #ffb200 0%, #ff8a00 60%, #ff6a00 100%);
+  border: none;
+  border-radius: 999px;
+
+  box-shadow: 0 10px 24px rgba(255, 122, 0, .35), 0 2px 6px rgba(0,0,0,.25);
+  cursor: pointer;
+
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  user-select: none;
+  overflow: hidden; /* for ripple */
+}
+
+.cta-btn:hover {
+  transform: translateX(-50%) scale(1.06);
+  box-shadow: 0 14px 30px rgba(255, 122, 0, .45), 0 4px 10px rgba(0,0,0,.28);
+  filter: saturate(1.1);
+}
+
+.cta-btn:active {
+  transform: translateX(-50%) scale(0.98);
+  box-shadow: 0 8px 18px rgba(255, 122, 0, .35), 0 2px 6px rgba(0,0,0,.25);
+}
+
+.cta-btn:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Click ripple effect */
+.cta-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms ease-out;
+  background: rgba(255,255,255,.55);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+@keyframes ripple {
+  to { transform: scale(3.2); opacity: 0; }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .cta-btn,
+  .cta-btn:hover,
+  .cta-btn:active {
+    transition: none;
+    transform: translateX(-50%);
   }
-  
-  body.sasuke-page p {
-    font-family: Arial, sans-serif !important;
-    color: #222 !important;
-  }
-  
-  body.sasuke-page h1,
-  body.sasuke-page h2 {
-    color: #222 !important;
-  }
+}

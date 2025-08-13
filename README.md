@@ -71,3 +71,4 @@ character-showcase/
 4. Update index.html to include a new <a> link with class="character-link your-character".
 
 
+Grabing fonts From https://fonts.google.com/

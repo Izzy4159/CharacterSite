@@ -1,0 +1,124 @@
+<!-- characters/masterchief.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Master Chief</title>
+
+  <!-- Global styles -->
+  <link rel="stylesheet" href="../styles.css" />
+
+  <!-- Fonts used by styles.css (Anton + Roboto) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="masterchief-page">
+  <main>
+    <!-- IMG 1: Hero (replace src) -->
+    <img src="../images/masterchief-hero.jpg"
+         alt="Master Chief hero pose"
+         class="image-left"
+         width="220"
+         loading="eager"
+         fetchpriority="high"
+         decoding="async" />
+    <p><strong>Master Chief Petty Officer John-117</strong> is the protagonist of the <em>Halo</em> franchise. Debuting in <em>Halo: Combat Evolved</em> (2001), the Spartan supersoldier anchors a long-running series spanning games, books, comics, film (<em>Forward Unto Dawn</em>), and TV (2022–2024).</p>
+
+    <!-- IMG 2: Armor close-up -->
+    <img src="../images/masterchief-armor.jpg"
+         alt="MJOLNIR armor close-up"
+         class="image-right"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p>Designed as a vessel for player projection, Chief’s face remains concealed; his dialogue is sparse and deliberate. In games he’s voiced by Steve Downes; live-action portrayals include Pablo Schreiber.</p>
+
+    <h2>Pop Culture Icon</h2>
+    <!-- IMG 3: Franchise montage -->
+    <img src="../images/masterchief-franchise.jpg"
+         alt="Halo franchise montage"
+         class="image-left"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p>Chief is widely regarded as an all-time great video game character and a mascot for both <em>Halo</em> and Xbox. Early reception praised the immersive design, while later entries by 343 Industries drew acclaim for exploring his humanity and bond with Cortana.</p>
+
+    <h2>Childhood &amp; Spartan-II Training</h2>
+
+    <blockquote>
+      “They let me pick… You had something they didn't. Can you guess? <strong>Luck.</strong> Was I wrong?” — <em>Cortana</em>
+    </blockquote>
+
+    <!-- IMG 4: Young John -->
+    <img src="../images/masterchief-childhood.jpg"
+         alt="Young John-117 on Eridanus II"
+         class="image-right"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p>Born in 2511 on Eridanus II, John was identified by Dr. Catherine Halsey at age six as an ideal candidate for the SPARTAN-II program—exceptional stature, reflexes, intellect, and a relentless drive.</p>
+
+    <!-- IMG 5: Halsey & coin test -->
+    <img src="../images/masterchief-coin.jpg"
+         alt="Coin test with Dr. Halsey"
+         class="image-left"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p>During evaluation with Halsey and Lt. Jacob Keyes, John famously intercepted a tossed coin mid-air—calling the facing correctly—hinting at his uncanny instincts (and luck).</p>
+
+    <!-- IMG 6: Early squad training -->
+    <img src="../images/masterchief-training.jpg"
+         alt="Spartan-II boot camp"
+         class="image-right"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p>Relocated to Reach, John trained under Chief Mendez alongside peers like Kelly and Sam. He emerged as a natural leader, ultimately becoming the de facto head of Blue Team.</p>
+
+    <!-- IMG 7: Mountain extraction exercise -->
+    <img src="../images/masterchief-exercise.jpg"
+         alt="Training exercise in snowy mountains"
+         class="image-left"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p>On a pivotal exercise, John led his team to seize a Pelican from disguised Marines to extract <em>everyone</em>—a risky call that injured the “opponents,” but proved his initiative and refusal to abandon teammates. He was promoted to squad leader.</p>
+
+    <h2>Spartan Abilities &amp; Equipment</h2>
+
+    <!-- IMG 8: MJOLNIR & weaponry -->
+    <img src="../images/masterchief-mjolnir.jpg"
+         alt="Master Chief with MJOLNIR armor and MA5 rifle"
+         class="image-right"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p>As a Spartan-II, John combines elite training, tactical brilliance, and augmented physiology with MJOLNIR powered armor. He excels at rapid threat assessment, squad leadership, and executing high-risk objectives against overwhelming odds.</p>
+  </main>
+
+  <!-- Bottom center orange CTA button (uses .cta-btn in styles.css) -->
+  <button class="cta-btn" aria-label="Back to Characters" onclick="location.href='../index.html'">
+    Back to Characters
+  </button>
+
+  <script>
+    // Ripple on click for CTA (matches Batman/Sasuke)
+    const btn = document.querySelector('.cta-btn');
+    btn.addEventListener('click', function(e){
+      const rect = this.getBoundingClientRect();
+      const diameter = Math.max(this.clientWidth, this.clientHeight);
+      const radius = diameter / 2;
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+      ripple.style.width = ripple.style.height = `${diameter}px`;
+      ripple.style.left = `${e.clientX - rect.left - radius}px`;
+      ripple.style.top  = `${e.clientY - rect.top  - radius}px`;
+      const prev = this.querySelector('.ripple');
+      if (prev) prev.remove();
+      this.appendChild(ripple);
+    });
+  </script>
+</body>
+</html>
