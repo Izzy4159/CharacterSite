@@ -39,45 +39,87 @@ a {
 }
 a:hover { text-decoration: underline; }
 
-/* Index page */
+/* ===== Index page layout (room for bigger buttons) ===== */
 .index-page .character-list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
+  gap: 22px;
   place-items: center;
   margin-top: 32px;
 }
 
 @media (min-width: 640px) {
   .index-page .character-list {
-    grid-template-columns: repeat(2, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
   }
 }
 
+@media (min-width: 1024px) {
+  .index-page .character-list {
+    grid-template-columns: repeat(3, minmax(280px, 1fr));
+  }
+}
+
+/* ===== Bigger, glowier character buttons ===== */
 .character-link {
   display: inline-block;
-  font-size: 1.4rem;
-  font-weight: 700;
-  padding: 10px 22px;
-  border-radius: 12px;
-  transition: transform 0.15s ease, background-color 0.2s ease;
-  will-change: transform;
+  font-size: 2.2rem;       /* ~2x bigger */
+  font-weight: 900;
+  padding: 20px 36px;
+  border-radius: 18px;
+  text-align: center;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  transition:
+    transform 0.20s ease,
+    background-color 0.20s ease,
+    box-shadow 0.20s ease,
+    filter 0.20s ease;
+  will-change: transform, box-shadow, filter;
 }
-.character-link:hover { transform: translateY(-1px); }
+.character-link:hover {
+  transform: translateY(-2px) scale(1.12);   /* bigger grow */
+  filter: saturate(1.08);
+  text-decoration: none;                     /* keep buttons clean */
+  box-shadow: 0 16px 36px rgba(0,0,0,.40);
+}
 
-/* Themes (menu buttons) */
+/* ===== Theme colors (menu buttons) ===== */
 .batman { color: #000; background-color: #fdd835; }
-.batman:hover { background-color: #ffc107; }
+.batman:hover {
+  background-color: #ffc107;
+  box-shadow: 0 12px 26px rgba(253,216,53,.45), 0 4px 10px rgba(0,0,0,.28);
+}
 
-.sasuke { color: #6a1b9a; background-color: #bdbdbd; }
-.sasuke:hover { background-color: #ce93d8; }
+/* Sasuke: purple with white text */
+.sasuke { color: #fff; background-color: #6a1b9a; }
+.sasuke:hover {
+  background-color: #7b1fa2;
+  box-shadow: 0 12px 26px rgba(123,31,162,.45), 0 4px 10px rgba(0,0,0,.28);
+}
 
-/* Master Chief (green + black) */
+/* Master Chief: green + black text */
 .masterchief { color: #000; background-color: #00e676; }
-.masterchief:hover { background-color: #00c853; }
+.masterchief:hover {
+  background-color: #00c853;
+  box-shadow: 0 12px 26px rgba(0,200,83,.45), 0 4px 10px rgba(0,0,0,.28);
+}
 
-/* Float utilities (with CLS prevention: set width in HTML) */
+/* Eren: dark turquoise with white text */
+.eren { color: #fff; background-color: #009688; }      /* teal 500 */
+.eren:hover {
+  background-color: #00796b;                            /* teal 700 */
+  box-shadow: 0 12px 26px rgba(0,150,136,.45), 0 4px 10px rgba(0,0,0,.28);
+}
+
+/* Zuko: red with white text */
+.zuko { color: #fff; background-color: #e53935; }      /* red 600 */
+.zuko:hover {
+  background-color: #c62828;                            /* red 800 */
+  box-shadow: 0 12px 26px rgba(229,57,53,.45), 0 4px 10px rgba(0,0,0,.28);
+}
+
+/* ===== Float utilities (with CLS prevention: set width in HTML) ===== */
 .image-left, .image-right, .image-bottom-left {
   width: 220px;
   height: auto;
@@ -98,11 +140,11 @@ a:hover { text-decoration: underline; }
   clear: both;
 }
 
-/* Sasuke page overrides */
+/* ===== Page-specific overrides ===== */
 body.sasuke-page {
   background-color: #f3e5f5;
   color: #222;
-  /* Keep headings in Anton, body stays Roboto for readability/perf */
+  /* Headings stay Anton; body stays Roboto for readability/perf */
 }
 body.sasuke-page h1, body.sasuke-page h2 { color: #222; }
 
@@ -136,18 +178,15 @@ body.sasuke-page h1, body.sasuke-page h2 { color: #222; }
   user-select: none;
   overflow: hidden; /* for ripple */
 }
-
 .cta-btn:hover {
   transform: translateX(-50%) scale(1.06);
   box-shadow: 0 14px 30px rgba(255, 122, 0, .45), 0 4px 10px rgba(0,0,0,.28);
   filter: saturate(1.1);
 }
-
 .cta-btn:active {
   transform: translateX(-50%) scale(0.98);
   box-shadow: 0 8px 18px rgba(255, 122, 0, .35), 0 2px 6px rgba(0,0,0,.25);
 }
-
 .cta-btn:focus-visible {
   outline: 3px solid #fff;
   outline-offset: 3px;
@@ -163,7 +202,6 @@ body.sasuke-page h1, body.sasuke-page h2 { color: #222; }
   pointer-events: none;
   mix-blend-mode: screen;
 }
-
 @keyframes ripple {
   to { transform: scale(3.2); opacity: 0; }
 }

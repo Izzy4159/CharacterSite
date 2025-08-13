@@ -1,0 +1,119 @@
+<!-- characters/erenjager.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eren Jaeger</title>
+
+  <!-- Global styles -->
+  <link rel="stylesheet" href="../styles.css" />
+
+  <!-- Fonts used by styles.css (Anton + Roboto) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="eren-page">
+  <header>
+    <h1>Eren Jaeger</h1>
+  </header>
+
+  <main>
+    <!-- 1 -->
+    <img src="https://imgur.com/08VjfM8.jpeg"
+         alt="Eren Jaeger pose"
+         class="image-left"
+         width="220"
+         loading="eager"
+         fetchpriority="high"
+         decoding="async" />
+    <p><!-- TODO: Intro paragraph --></p>
+
+    <!-- 2 -->
+    <img src="https://imgur.com/xKddv0r.jpeg"
+         alt="Eren determined"
+         class="image-right"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p><!-- TODO: Paragraph --></p>
+
+    <!-- 3 -->
+    <img src="https://imgur.com/SMyYg2A.jpeg"
+         alt="Eren with Survey Corps"
+         class="image-left"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p><!-- TODO: Paragraph --></p>
+
+    <!-- 4 -->
+    <img src="https://imgur.com/43KFBDL.jpeg"
+         alt="Eren action"
+         class="image-right"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p><!-- TODO: Paragraph --></p>
+
+    <!-- 5 -->
+    <img src="https://imgur.com/BECZO53.jpeg"
+         alt="Eren close-up"
+         class="image-left"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p><!-- TODO: Paragraph --></p>
+
+    <!-- 6 -->
+    <img src="https://imgur.com/ZOsIIkC.jpeg"
+         alt="Founding Titan vibes"
+         class="image-right"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p><!-- TODO: Paragraph --></p>
+
+    <!-- 7 -->
+    <img src="https://imgur.com/ZAlcbyf.jpeg"
+         alt="Eren transformation moment"
+         class="image-left"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p><!-- TODO: Paragraph --></p>
+
+    <!-- 8 -->
+    <img src="https://imgur.com/s2Y50Yo.jpeg"
+         alt="Eren brooding"
+         class="image-right"
+         width="220"
+         loading="lazy"
+         decoding="async" />
+    <p><!-- TODO: Paragraph --></p>
+  </main>
+
+  <!-- Bottom center orange CTA button -->
+  <button class="cta-btn" aria-label="Back to Characters" onclick="location.href='../index.html'">
+    Back to Characters
+  </button>
+
+  <script>
+    // Ripple on click
+    const btn = document.querySelector('.cta-btn');
+    btn.addEventListener('click', function(e){
+      const rect = this.getBoundingClientRect();
+      const diameter = Math.max(this.clientWidth, this.clientHeight);
+      const radius = diameter / 2;
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+      ripple.style.width = ripple.style.height = `${diameter}px`;
+      ripple.style.left = `${e.clientX - rect.left - radius}px`;
+      ripple.style.top  = `${e.clientY - rect.top  - radius}px`;
+      const prev = this.querySelector('.ripple');
+      if (prev) prev.remove();
+      this.appendChild(ripple);
+    });
+  </script>
+</body>
+</html>
