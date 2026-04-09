@@ -1,22 +1,1305 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Characters</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI',
+                   Helvetica, Arial, sans-serif;
+      background: #000;
+      overflow-x: hidden;
+    }
+
+    /* ================================================================
+       NAV
+    ================================================================ */
+    .nav-area {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .site-nav {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: rgba(18, 18, 18, 0.82);
+      backdrop-filter: saturate(180%) blur(22px);
+      -webkit-backdrop-filter: saturate(180%) blur(22px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .nav-logo {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #f5f5f7;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      color: rgba(245, 245, 247, 0.75);
+      font-size: 13px;
+      font-weight: 400;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-trigger:hover { color: #f5f5f7; background: rgba(255,255,255,0.06); }
+
+    .nav-chevron {
+      display: inline-block;
+      font-size: 11px;
+      transition: transform 0.22s ease;
+    }
+    .nav-area.open .nav-chevron { transform: rotate(180deg); }
+
+    /* ── Mega dropdown ── */
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(20, 20, 20, 0.97);
+      backdrop-filter: saturate(150%) blur(30px);
+      -webkit-backdrop-filter: saturate(150%) blur(30px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 28px 40px 32px;
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+    .nav-area.open .mega-dropdown {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .dropdown-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .dropdown-char {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 12px 14px;
+      border-radius: 14px;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: background 0.18s, border-color 0.18s;
+    }
+    .dropdown-char:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.10);
+    }
+
+    .dropdown-thumb {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .dropdown-thumb-placeholder {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      background: rgba(229, 57, 53, 0.18);
+      border: 2px solid rgba(255, 138, 0, 0.30);
+    }
+
+    .dropdown-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f5f5f7;
+    }
+
+    .dropdown-sub {
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(245, 245, 247, 0.45);
+      margin-top: -6px;
+    }
+
+    /* ================================================================
+       CHARACTER SECTIONS
+       Default: ~62vh.  Hover expands to 100vh (unless panel is open).
+    ================================================================ */
+    .char-section {
+      min-height: 62vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 72px 24px 56px;
+      transition: min-height 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Expand to full viewport on hover — but not when a details panel is open */
+    .char-section:not(.panel-open):hover {
+      min-height: 100vh;
+    }
+
+    /* ================================================================
+       BACKGROUND PHOTO LAYERS
+    ================================================================ */
+    .section-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center 20%;
+      transform: scale(1);
+      will-change: transform;
+    }
+
+    /* Ken Burns zoom — triggered by .kb-play class (added via IntersectionObserver) */
+    @keyframes kenburns {
+      from { transform: scale(1); }
+      to   { transform: scale(1.08); }
+    }
+    .section-bg.kb-play {
+      animation: kenburns 10s ease-out forwards;
+    }
+
+    /* Dark overlay so text stays readable — ~62% opacity */
+    .section-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.62);
+    }
+
+    /* Content layers must sit above the bg layers */
+    .hero-content,
+    .details-panel {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Glass tint on the expanded details panel when section has a bg photo */
+    .char-section:has(.section-bg) .details-content {
+      background: rgba(0, 0, 0, 0.38);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    /* ================================================================
+       HERO COPY
+    ================================================================ */
+    .hero-content { max-width: 700px; width: 100%; }
+
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: clamp(68px, 11vw, 112px);
+      font-weight: 800;
+      letter-spacing: -3px;
+      line-height: 0.94;
+      margin-bottom: 22px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(19px, 2.8vw, 26px);
+      font-weight: 300;
+      line-height: 1.35;
+      margin-bottom: 44px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary, .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 26px;
+      border-radius: 980px;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+    .btn-primary:hover, .btn-outline:hover { transform: scale(1.04); opacity: 0.86; }
+    .btn-primary:active, .btn-outline:active { transform: scale(0.97); }
+    .btn-primary { border: none; }
+    .btn-outline  { background: transparent; border: 1.5px solid; }
+
+    /* ================================================================
+       EXPAND PANEL  — grid-template-rows trick for true height animation
+    ================================================================ */
+    .details-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      width: 100%;
+      max-width: 860px;
+      transition:
+        grid-template-rows 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity            0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+    }
+    .details-panel.expanded {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+
+    .details-inner  { overflow: hidden; min-height: 0; }
+    .details-content { padding: 56px 20px; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .stat-card   { padding: 22px 20px; text-align: left; }
+    .stat-label  { display: block; font-size: 11px; font-weight: 600;
+                   letter-spacing: 0.07em; text-transform: uppercase;
+                   opacity: 0.45; margin-bottom: 7px; }
+    .stat-value  { display: block; font-size: 15px; font-weight: 600; }
+
+    .details-bio {
+      font-size: 17px; line-height: 1.76;
+      text-align: left; max-width: 680px;
+      margin: 0 auto 20px;
+    }
+
+    .btn-collapse {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 36px; padding: 11px 22px;
+      border-radius: 980px; font-size: 14px; font-weight: 500;
+      font-family: inherit; cursor: pointer; background: transparent;
+      transition: opacity 0.2s;
+    }
+    .btn-collapse:hover { opacity: 0.55; }
+
+    /* ================================================================
+       SECTION THEMES  — five hardcoded character IDs
+    ================================================================ */
+    #batman { background: #0d0d0d; }
+    #batman .hero-eyebrow { color: #f5c518; }
+    #batman .hero-title   { color: #ffffff; }
+    #batman .hero-tagline { color: rgba(255,255,255,0.50); }
+    #batman .btn-primary  { background: #f5c518; color: #000; }
+    #batman .btn-outline  { color: #f5c518; border-color: rgba(245,197,24,0.50); }
+    #batman .stats-grid   { background: rgba(255,255,255,0.09); }
+    #batman .stat-card    { background: #161616; }
+    #batman .stat-label   { color: #888; }
+    #batman .stat-value   { color: #f0f0f0; }
+    #batman .details-bio  { color: rgba(255,255,255,0.62); }
+    #batman .btn-collapse { color: #f5c518; border: 1.5px solid rgba(245,197,24,0.40); }
+
+    #sasuke { background: #0c0816; }
+    #sasuke .hero-eyebrow { color: #b39ddb; }
+    #sasuke .hero-title   { color: #ffffff; }
+    #sasuke .hero-tagline { color: rgba(200,185,240,0.55); }
+    #sasuke .btn-primary  { background: #7c3aed; color: #fff; }
+    #sasuke .btn-outline  { color: #b39ddb; border-color: rgba(179,157,219,0.45); }
+    #sasuke .stats-grid   { background: rgba(255,255,255,0.07); }
+    #sasuke .stat-card    { background: #130f20; }
+    #sasuke .stat-label   { color: #8b7aaa; }
+    #sasuke .stat-value   { color: #e2d9f3; }
+    #sasuke .details-bio  { color: rgba(220,210,245,0.68); }
+    #sasuke .btn-collapse { color: #b39ddb; border: 1.5px solid rgba(179,157,219,0.40); }
+
+    #masterchief { background: #060e06; }
+    #masterchief .hero-eyebrow { color: #00e676; }
+    #masterchief .hero-title   { color: #ffffff; }
+    #masterchief .hero-tagline { color: rgba(200,230,200,0.50); }
+    #masterchief .btn-primary  { background: #00e676; color: #000; }
+    #masterchief .btn-outline  { color: #00e676; border-color: rgba(0,230,118,0.45); }
+    #masterchief .stats-grid   { background: rgba(255,255,255,0.07); }
+    #masterchief .stat-card    { background: #0a150a; }
+    #masterchief .stat-label   { color: #5a8a5a; }
+    #masterchief .stat-value   { color: #c8e6c9; }
+    #masterchief .details-bio  { color: rgba(180,220,180,0.72); }
+    #masterchief .btn-collapse { color: #00e676; border: 1.5px solid rgba(0,230,118,0.40); }
+
+    #eren { background: #f5f5f7; }
+    #eren .hero-eyebrow { color: #00796b; }
+    #eren .hero-title   { color: #1d1d1f; }
+    #eren .hero-tagline { color: rgba(29,29,31,0.52); }
+    #eren .btn-primary  { background: #009688; color: #fff; }
+    #eren .btn-outline  { color: #00796b; border-color: rgba(0,121,107,0.45); }
+    #eren .stats-grid   { background: rgba(0,0,0,0.07); }
+    #eren .stat-card    { background: #ffffff; }
+    #eren .stat-label   { color: #888; }
+    #eren .stat-value   { color: #1d1d1f; }
+    #eren .details-bio  { color: rgba(29,29,31,0.68); }
+    #eren .btn-collapse { color: #00796b; border: 1.5px solid rgba(0,121,107,0.40); }
+
+    #zuko { background: #120700; }
+    #zuko .hero-eyebrow { color: #ff8a00; }
+    #zuko .hero-title   { color: #ffffff; }
+    #zuko .hero-tagline { color: rgba(255,220,160,0.50); }
+    #zuko .btn-primary  { background: #e53935; color: #fff; }
+    #zuko .btn-outline  { color: #ff8a00; border-color: rgba(255,138,0,0.45); }
+    #zuko .stats-grid   { background: rgba(255,255,255,0.07); }
+    #zuko .stat-card    { background: #1c0b02; }
+    #zuko .stat-label   { color: #8a5a3a; }
+    #zuko .stat-value   { color: #ffe0b2; }
+    #zuko .details-bio  { color: rgba(255,224,178,0.68); }
+    #zuko .btn-collapse { color: #ff8a00; border: 1.5px solid rgba(255,138,0,0.40); }
+
+    /* ================================================================
+       ADD CHARACTER FAB  — fixed bottom-right
+    ================================================================ */
+    .add-char-fab {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #000;
+      border: none;
+      font-size: 28px;
+      font-weight: 200;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55);
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.18s ease;
+      z-index: 150;
+    }
+    .add-char-fab:hover {
+      transform: scale(1.12) rotate(90deg);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65);
+    }
+    .add-char-fab:active { transform: scale(0.94) rotate(90deg); }
+
+    /* ================================================================
+       MODAL
+    ================================================================ */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #1c1c1e;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 22px;
+      width: min(600px, 100%);
+      max-height: calc(100dvh - 60px);
+      overflow-y: auto;
+      padding: 32px 30px 28px;
+      transform: scale(0.95) translateY(12px);
+      transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.12) transparent;
+    }
+    .modal-backdrop.open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 26px;
+    }
+    .modal-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #f5f5f7;
+    }
+    .modal-close {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.10);
+      color: #f5f5f7;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .modal-close:hover { background: rgba(255, 255, 255, 0.18); }
+
+    /* ── Form elements ── */
+    .form-row { margin-bottom: 16px; }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: rgba(245, 245, 247, 0.50);
+      margin-bottom: 7px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 10px;
+      padding: 10px 13px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #f5f5f7;
+      outline: none;
+      transition: border-color 0.18s;
+    }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: rgba(245,245,247,0.25); }
+    .form-input:focus,
+    .form-textarea:focus { border-color: rgba(255, 255, 255, 0.35); }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 96px;
+      line-height: 1.6;
+    }
+
+    /* file input */
+    .form-input[type="file"] { padding: 8px 13px; cursor: pointer; }
+    .form-input[type="file"]::-webkit-file-upload-button {
+      background: rgba(255,255,255,0.12);
+      color: #f5f5f7;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    /* color row */
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .form-color {
+      width: 44px;
+      height: 36px;
+      padding: 2px 3px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .color-hint {
+      font-size: 12px;
+      color: rgba(245,245,247,0.35);
+      line-height: 1.4;
+    }
+
+    /* Stats rows */
+    .modal-stats-grid { display: grid; gap: 7px; }
+    .modal-stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    /* Divider */
+    .form-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin: 22px 0 18px;
+    }
+
+    /* Submit */
+    .modal-submit {
+      width: 100%;
+      padding: 14px;
+      border-radius: 980px;
+      border: none;
+      background: #ffffff;
+      color: #000000;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .modal-submit:hover  { opacity: 0.88; transform: scale(1.02); }
+    .modal-submit:active { transform: scale(0.98); }
+    .modal-submit:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+    /* Error */
+    .modal-error {
+      font-size: 13px;
+      color: #ff6b6b;
+      min-height: 18px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* ================================================================
+       RESPONSIVE
+    ================================================================ */
+    @media (max-width: 900px) {
+      .dropdown-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .mega-dropdown { padding: 20px 24px 24px; }
+    }
+    @media (max-width: 540px) {
+      .site-nav { padding: 0 18px; }
+      .nav-logo { font-size: 15px; }
+      .dropdown-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-outline { width: 100%; max-width: 280px; }
+      .details-content { padding: 36px 12px; }
+      .modal-card { padding: 24px 18px 22px; }
+      .modal-stat-row { grid-template-columns: 1fr; }
+      .add-char-fab { bottom: 20px; right: 18px; }
+    }
+    @media (max-width: 380px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .dropdown-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .details-panel, .mega-dropdown, .section-bg,
+      .char-section, .btn-primary, .btn-outline,
+      .btn-collapse, .add-char-fab, .modal-backdrop,
+      .modal-card { transition: none; animation: none; }
+    }
+  </style>
 </head>
-<body class="index-page">
-  <h1>Characters</h1>
-  <div class="character-list">
-    <a href="characters/batman.html" class="character-link batman">Batman</a>
-    <a href="characters/sasuke.html" class="character-link sasuke">Sasuke</a>
-    <a href="characters/masterchief.html" class="character-link masterchief">Master Chief</a>
-    <a href="characters/erenjager.html" class="character-link eren">Eren Jaeger</a>
-    <a href="characters/zuko.html" class="character-link zuko">Zuko</a>
+<body>
+
+  <!-- ================================================================
+       NAV AREA
+  ================================================================ -->
+  <div class="nav-area" id="nav-area">
+    <nav class="site-nav" aria-label="Site navigation">
+      <a href="#" class="nav-logo">Characters</a>
+      <button class="nav-trigger" id="nav-trigger"
+              aria-haspopup="true" aria-expanded="false"
+              aria-controls="mega-dropdown">
+        Browse <span class="nav-chevron" aria-hidden="true">⌄</span>
+      </button>
+    </nav>
+
+    <div class="mega-dropdown" id="mega-dropdown" role="navigation"
+         aria-label="Character pages">
+      <div class="dropdown-grid" id="dropdown-grid">
+
+        <a class="dropdown-char" href="characters/batman.html">
+          <img class="dropdown-thumb"
+               src="https://imgur.com/KpUUBcT.jpeg"
+               alt="Batman" loading="lazy" decoding="async">
+          <span class="dropdown-name">Batman</span>
+          <span class="dropdown-sub">DC Comics</span>
+        </a>
+
+        <a class="dropdown-char" href="characters/sasuke.html">
+          <img class="dropdown-thumb"
+               src="https://i.imgur.com/uHXkjvE.jpeg"
+               alt="Sasuke" loading="lazy" decoding="async">
+          <span class="dropdown-name">Sasuke</span>
+          <span class="dropdown-sub">Naruto</span>
+        </a>
+
+        <a class="dropdown-char" href="characters/masterchief.html">
+          <img class="dropdown-thumb"
+               src="https://imgur.com/NG4uqLb.jpeg"
+               alt="Master Chief" loading="lazy" decoding="async">
+          <span class="dropdown-name">Master Chief</span>
+          <span class="dropdown-sub">Halo</span>
+        </a>
+
+        <a class="dropdown-char" href="characters/erenjager.html">
+          <img class="dropdown-thumb"
+               src="https://imgur.com/08VjfM8.jpeg"
+               alt="Eren Jaeger" loading="lazy" decoding="async">
+          <span class="dropdown-name">Eren Jaeger</span>
+          <span class="dropdown-sub">Attack on Titan</span>
+        </a>
+
+        <a class="dropdown-char" href="characters/zuko.html">
+          <div class="dropdown-thumb-placeholder" aria-hidden="true">🔥</div>
+          <span class="dropdown-name">Zuko</span>
+          <span class="dropdown-sub">Avatar: TLAB</span>
+        </a>
+
+        <!-- [[DROPDOWN_ITEMS_END]] -->
+      </div>
+    </div>
   </div>
+
+  <main>
+
+    <!-- ================================================================
+         BATMAN
+    ================================================================ -->
+    <section class="char-section" id="batman">
+      <div class="section-bg" style="background-image:url('https://imgur.com/KpUUBcT.jpeg')"></div>
+      <div class="section-overlay"></div>
+      <div class="hero-content">
+        <p class="hero-eyebrow">DC Comics &middot; 1939</p>
+        <h1 class="hero-title">Batman</h1>
+        <p class="hero-tagline">The Dark Knight of Gotham.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="toggleDetails('batman-panel', this)">Learn More</button>
+          <a class="btn-outline" href="characters/batman.html">View Character ↗</a>
+        </div>
+      </div>
+
+      <div class="details-panel" id="batman-panel">
+        <div class="details-inner"><div class="details-content">
+          <div class="stats-grid">
+            <div class="stat-card"><span class="stat-label">Real Name</span><span class="stat-value">Bruce Wayne</span></div>
+            <div class="stat-card"><span class="stat-label">Base of Operations</span><span class="stat-value">Gotham City</span></div>
+            <div class="stat-card"><span class="stat-label">Affiliation</span><span class="stat-value">Justice League</span></div>
+            <div class="stat-card"><span class="stat-label">Fighting Styles</span><span class="stat-value">127+</span></div>
+            <div class="stat-card"><span class="stat-label">First Appeared</span><span class="stat-value">Detective Comics #27</span></div>
+            <div class="stat-card"><span class="stat-label">Created By</span><span class="stat-value">Kane &amp; Finger</span></div>
+          </div>
+          <p class="details-bio">Batman has no superpowers. Instead he relies on an extraordinary combination of scientific expertise, detective ability, peak physical conditioning, and vast wealth. Having trained himself from the age of ten, he mastered over 127 fighting styles and every major scientific discipline — ensuring no one else ever suffers the loss he endured as a child.</p>
+          <p class="details-bio">His greatest weapon isn't the Batarang or the Batsuit — it's his mind. Widely regarded as DC's greatest tactician, Batman maintains contingency plans against even his closest allies. And through every battle, one rule never breaks: he does not kill.</p>
+          <button class="btn-collapse" onclick="toggleDetails('batman-panel', this)">Close ↑</button>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         SASUKE
+    ================================================================ -->
+    <section class="char-section" id="sasuke">
+      <div class="section-bg" style="background-image:url('https://i.imgur.com/uHXkjvE.jpeg')"></div>
+      <div class="section-overlay"></div>
+      <div class="hero-content">
+        <p class="hero-eyebrow">Naruto &middot; Konohagakure</p>
+        <h1 class="hero-title">Sasuke</h1>
+        <p class="hero-tagline">From vengeance to redemption.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="toggleDetails('sasuke-panel', this)">Learn More</button>
+          <a class="btn-outline" href="characters/sasuke.html">View Character ↗</a>
+        </div>
+      </div>
+
+      <div class="details-panel" id="sasuke-panel">
+        <div class="details-inner"><div class="details-content">
+          <div class="stats-grid">
+            <div class="stat-card"><span class="stat-label">Full Name</span><span class="stat-value">Uchiha Sasuke</span></div>
+            <div class="stat-card"><span class="stat-label">Clan</span><span class="stat-value">Uchiha Clan</span></div>
+            <div class="stat-card"><span class="stat-label">Village</span><span class="stat-value">Konohagakure</span></div>
+            <div class="stat-card"><span class="stat-label">Dōjutsu</span><span class="stat-value">Sharingan · Rinnegan</span></div>
+            <div class="stat-card"><span class="stat-label">Title</span><span class="stat-value">Supporting Kage</span></div>
+            <div class="stat-card"><span class="stat-label">Rival</span><span class="stat-value">Naruto Uzumaki</span></div>
+          </div>
+          <p class="details-bio">After his older brother Itachi slaughtered their entire clan, a young Sasuke dedicated his life to a single purpose: revenge. He abandoned his village, sought power through forbidden means, and walked a path that branded him an international criminal — all in pursuit of one man.</p>
+          <p class="details-bio">The truth shattered everything he believed. Itachi's massacre was an act of sacrifice, not malice. With that revelation, Sasuke's hatred had no target — only a mission. He helped end the Fourth Shinobi World War and returned to Konoha as its "Supporting Shadow."</p>
+          <button class="btn-collapse" onclick="toggleDetails('sasuke-panel', this)">Close ↑</button>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         MASTER CHIEF
+    ================================================================ -->
+    <section class="char-section" id="masterchief">
+      <div class="section-bg" style="background-image:url('https://imgur.com/NG4uqLb.jpeg')"></div>
+      <div class="section-overlay"></div>
+      <div class="hero-content">
+        <p class="hero-eyebrow">Halo &middot; UNSC</p>
+        <h1 class="hero-title">Master Chief</h1>
+        <p class="hero-tagline">Humanity's last line of defense.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="toggleDetails('chief-panel', this)">Learn More</button>
+          <a class="btn-outline" href="characters/masterchief.html">View Character ↗</a>
+        </div>
+      </div>
+
+      <div class="details-panel" id="chief-panel">
+        <div class="details-inner"><div class="details-content">
+          <div class="stats-grid">
+            <div class="stat-card"><span class="stat-label">Designation</span><span class="stat-value">John-117</span></div>
+            <div class="stat-card"><span class="stat-label">Program</span><span class="stat-value">SPARTAN-II</span></div>
+            <div class="stat-card"><span class="stat-label">Branch</span><span class="stat-value">UNSC Naval Spec. Warfare</span></div>
+            <div class="stat-card"><span class="stat-label">Armor</span><span class="stat-value">MJOLNIR Powered Assault</span></div>
+            <div class="stat-card"><span class="stat-label">Born</span><span class="stat-value">2511 · Eridanus II</span></div>
+            <div class="stat-card"><span class="stat-label">Voiced By</span><span class="stat-value">Steve Downes</span></div>
+          </div>
+          <p class="details-bio">Kidnapped at six years old to become one of the UNSC's super-soldiers, John-117 was never given a choice. Augmented beyond human limits, sealed inside half a ton of powered armor, and sent against threats that would annihilate entire worlds — he became the man the UNSC calls when everything else has failed.</p>
+          <p class="details-bio">With over thirty years of active service, Master Chief has earned every UNSC medal except the Prisoner of War Medallion. There is a reason for that: he does not get captured. He survives. He adapts. And then he wins.</p>
+          <button class="btn-collapse" onclick="toggleDetails('chief-panel', this)">Close ↑</button>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         EREN JAEGER  (light theme — no bg photo)
+    ================================================================ -->
+    <section class="char-section" id="eren">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Attack on Titan &middot; Paradis Island</p>
+        <h1 class="hero-title">Eren Jaeger</h1>
+        <p class="hero-tagline">Born free. Bound by fate.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="toggleDetails('eren-panel', this)">Learn More</button>
+          <a class="btn-outline" href="characters/erenjager.html">View Character ↗</a>
+        </div>
+      </div>
+
+      <div class="details-panel" id="eren-panel">
+        <div class="details-inner"><div class="details-content">
+          <div class="stats-grid">
+            <div class="stat-card"><span class="stat-label">Affiliation</span><span class="stat-value">Scout Regiment</span></div>
+            <div class="stat-card"><span class="stat-label">Titan Powers</span><span class="stat-value">Attack · Founding · War Hammer</span></div>
+            <div class="stat-card"><span class="stat-label">Home</span><span class="stat-value">Shiganshina District</span></div>
+            <div class="stat-card"><span class="stat-label">Goal</span><span class="stat-value">Freedom for Eldia</span></div>
+            <div class="stat-card"><span class="stat-label">Series</span><span class="stat-value">Attack on Titan (2009)</span></div>
+            <div class="stat-card"><span class="stat-label">Creator</span><span class="stat-value">Hajime Isayama</span></div>
+          </div>
+          <p class="details-bio">Eren Jaeger grew up dreaming of the world beyond the walls — a boy who couldn't accept a cage, no matter how safe. When the Colossal Titan breached his hometown and devoured his world, that dream hardened into something unbreakable: a vow to kill every last Titan, no matter the cost.</p>
+          <p class="details-bio">Wielding three Titan powers — Attack, Founding, and War Hammer — Eren became the most powerful being on his world. But power without wisdom is a catastrophe, and his march toward "freedom" blurred every line between hero and monster.</p>
+          <button class="btn-collapse" onclick="toggleDetails('eren-panel', this)">Close ↑</button>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         ZUKO  (dark, no bg photo yet)
+    ================================================================ -->
+    <section class="char-section" id="zuko">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Avatar: The Last Airbender &middot; Fire Nation</p>
+        <h1 class="hero-title">Zuko</h1>
+        <p class="hero-tagline">Honor isn't given. It's earned.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="toggleDetails('zuko-panel', this)">Learn More</button>
+          <a class="btn-outline" href="characters/zuko.html">View Character ↗</a>
+        </div>
+      </div>
+
+      <div class="details-panel" id="zuko-panel">
+        <div class="details-inner"><div class="details-content">
+          <div class="stats-grid">
+            <div class="stat-card"><span class="stat-label">Title</span><span class="stat-value">Fire Lord Zuko</span></div>
+            <div class="stat-card"><span class="stat-label">Nation</span><span class="stat-value">Fire Nation</span></div>
+            <div class="stat-card"><span class="stat-label">Bending</span><span class="stat-value">Firebending</span></div>
+            <div class="stat-card"><span class="stat-label">Ability</span><span class="stat-value">Lightning Redirection</span></div>
+            <div class="stat-card"><span class="stat-label">Mentor</span><span class="stat-value">Uncle Iroh</span></div>
+            <div class="stat-card"><span class="stat-label">Arc</span><span class="stat-value">Antagonist → Hero</span></div>
+          </div>
+          <p class="details-bio">Prince Zuko spent three years chasing the Avatar across the world, bearing his father's scar and his father's mission. Banished and told he could only return with honor, he pursued a goal that was never truly his — desperate to earn the approval of a man who had never deserved his loyalty.</p>
+          <p class="details-bio">Guided by his uncle Iroh and the truth in his own heart, Zuko eventually made the hardest choice: to join the Avatar and oppose the nation he was born into. His journey remains one of animation's most celebrated redemption arcs.</p>
+          <button class="btn-collapse" onclick="toggleDetails('zuko-panel', this)">Close ↑</button>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- [[CHAR_SECTIONS_END]] -->
+  </main>
+
+  <!-- ================================================================
+       ADD CHARACTER FAB
+  ================================================================ -->
+  <button class="add-char-fab" id="add-char-fab"
+          onclick="openModal()" aria-label="Add new character"
+          title="Add character">+</button>
+
+  <!-- ================================================================
+       ADD CHARACTER MODAL
+  ================================================================ -->
+  <div class="modal-backdrop" id="modal-backdrop" aria-modal="true" role="dialog"
+       aria-labelledby="modal-title-text">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title-text">New Character</span>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+
+      <form id="add-char-form" onsubmit="submitNewChar(event)" autocomplete="off">
+
+        <div class="form-row">
+          <label class="form-label" for="nc-name">Character Name *</label>
+          <input class="form-input" id="nc-name" type="text" required
+                 placeholder="e.g. Spider-Man">
+        </div>
+
+        <div class="form-row">
+          <label class="form-label" for="nc-tagline">Tagline</label>
+          <input class="form-input" id="nc-tagline" type="text"
+                 placeholder="e.g. With great power comes great responsibility.">
+        </div>
+
+        <div class="form-row">
+          <label class="form-label" for="nc-eyebrow">Universe &amp; Year</label>
+          <input class="form-input" id="nc-eyebrow" type="text"
+                 placeholder="e.g. Marvel · 1962">
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Accent Color</label>
+          <div class="color-row">
+            <input class="form-color" id="nc-accent" type="color" value="#3b82f6">
+            <span class="color-hint">Used for the eyebrow label, buttons,<br>and section highlights</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label" for="nc-bg">
+            Background Image <span style="opacity:.45">(optional)</span>
+          </label>
+          <input class="form-input" id="nc-bg" type="file" accept="image/*">
+        </div>
+
+        <hr class="form-divider">
+
+        <div class="form-row">
+          <label class="form-label" for="nc-bio">Bio</label>
+          <textarea class="form-textarea" id="nc-bio"
+            placeholder="Write a bio. Separate paragraphs with a blank line.&#10;&#10;Additional paragraph here."></textarea>
+        </div>
+
+        <hr class="form-divider">
+
+        <div class="form-row">
+          <label class="form-label">Stats</label>
+          <div class="modal-stats-grid">
+            <div class="modal-stat-row">
+              <input class="form-input" type="text" data-stat-label="0"
+                     value="Real Name" placeholder="Label">
+              <input class="form-input" type="text" data-stat-value="0"
+                     placeholder="Value">
+            </div>
+            <div class="modal-stat-row">
+              <input class="form-input" type="text" data-stat-label="1"
+                     value="Base of Operations" placeholder="Label">
+              <input class="form-input" type="text" data-stat-value="1"
+                     placeholder="Value">
+            </div>
+            <div class="modal-stat-row">
+              <input class="form-input" type="text" data-stat-label="2"
+                     value="Affiliation" placeholder="Label">
+              <input class="form-input" type="text" data-stat-value="2"
+                     placeholder="Value">
+            </div>
+            <div class="modal-stat-row">
+              <input class="form-input" type="text" data-stat-label="3"
+                     value="Fighting Styles" placeholder="Label">
+              <input class="form-input" type="text" data-stat-value="3"
+                     placeholder="Value">
+            </div>
+            <div class="modal-stat-row">
+              <input class="form-input" type="text" data-stat-label="4"
+                     value="First Appeared" placeholder="Label">
+              <input class="form-input" type="text" data-stat-value="4"
+                     placeholder="Value">
+            </div>
+            <div class="modal-stat-row">
+              <input class="form-input" type="text" data-stat-label="5"
+                     value="Created By" placeholder="Label">
+              <input class="form-input" type="text" data-stat-value="5"
+                     placeholder="Value">
+            </div>
+          </div>
+        </div>
+
+        <p class="modal-error" id="modal-error" aria-live="polite"></p>
+        <button class="modal-submit" type="submit" id="modal-submit">
+          Create Character
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    /* ================================================================
+       EXPAND / COLLAPSE PANELS
+    ================================================================ */
+    function toggleDetails(id, triggerBtn) {
+      var panel    = document.getElementById(id);
+      var section  = panel.closest('.char-section');
+      var learnBtn = section.querySelector('.btn-primary');
+      var expanding = !panel.classList.contains('expanded');
+
+      panel.classList.toggle('expanded', expanding);
+      // Prevent hover-expand while a panel is open
+      section.classList.toggle('panel-open', expanding);
+      learnBtn.textContent = expanding ? 'Close ↑' : 'Learn More';
+
+      if (expanding) {
+        setTimeout(function () {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 60);
+      } else {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    /* ================================================================
+       MEGA DROPDOWN — hover open/close + keyboard
+    ================================================================ */
+    (function () {
+      var area    = document.getElementById('nav-area');
+      var trigger = document.getElementById('nav-trigger');
+      if (!area || !trigger) return;
+
+      function open()  { area.classList.add('open');    trigger.setAttribute('aria-expanded', 'true'); }
+      function close() { area.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
+
+      area.addEventListener('mouseenter', open);
+      area.addEventListener('mouseleave', close);
+
+      trigger.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          area.classList.contains('open') ? close() : open();
+        }
+        if (e.key === 'Escape') close();
+      });
+    }());
+
+    /* ================================================================
+       KEN BURNS — IntersectionObserver restarts animation per section
+    ================================================================ */
+    var kbObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var bg = e.target.querySelector('.section-bg');
+        if (!bg) return;
+        if (e.isIntersecting) {
+          // Remove + reflow + re-add to restart the CSS animation
+          bg.classList.remove('kb-play');
+          void bg.offsetWidth;
+          bg.classList.add('kb-play');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.char-section').forEach(function (s) {
+      kbObserver.observe(s);
+    });
+
+    /* ================================================================
+       MODAL — open / close
+    ================================================================ */
+    function openModal() {
+      document.getElementById('modal-backdrop').classList.add('open');
+      setTimeout(function () { document.getElementById('nc-name').focus(); }, 120);
+    }
+
+    function closeModal() {
+      document.getElementById('modal-backdrop').classList.remove('open');
+      document.getElementById('add-char-form').reset();
+      document.getElementById('modal-error').textContent = '';
+      var btn = document.getElementById('modal-submit');
+      btn.disabled = false;
+      btn.textContent = 'Create Character';
+    }
+
+    // Close on backdrop click
+    document.getElementById('modal-backdrop').addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' &&
+          document.getElementById('modal-backdrop').classList.contains('open')) {
+        closeModal();
+      }
+    });
+
+    /* ================================================================
+       SUBMIT NEW CHARACTER
+    ================================================================ */
+    async function submitNewChar(e) {
+      e.preventDefault();
+      var submitBtn = document.getElementById('modal-submit');
+      var errorEl   = document.getElementById('modal-error');
+      errorEl.textContent = '';
+      submitBtn.disabled  = true;
+      submitBtn.textContent = 'Creating…';
+
+      try {
+        // Collect stats (skip rows where both label and value are empty)
+        var stats = [];
+        for (var i = 0; i < 6; i++) {
+          var lbl = document.querySelector('[data-stat-label="' + i + '"]').value.trim();
+          var val = document.querySelector('[data-stat-value="' + i + '"]').value.trim();
+          if (lbl || val) stats.push({ label: lbl, value: val });
+        }
+
+        // Parse bio textarea into paragraph objects
+        var bioRaw = document.getElementById('nc-bio').value;
+        var bio = bioRaw
+          .split(/\n\s*\n/)
+          .map(function (s) { return s.trim(); })
+          .filter(Boolean)
+          .map(function (text) { return { type: 'paragraph', text: text }; });
+
+        // Read background image (if supplied)
+        var bgImage = '', bgImageFilename = 'bg.jpg';
+        var bgFile  = document.getElementById('nc-bg').files[0];
+        if (bgFile) {
+          bgImage = await readFileAsDataURL(bgFile);
+          bgImageFilename = bgFile.name;
+        }
+
+        var payload = {
+          title:           document.getElementById('nc-name').value.trim(),
+          eyebrow:         document.getElementById('nc-eyebrow').value.trim(),
+          tagline:         document.getElementById('nc-tagline').value.trim(),
+          accent:          document.getElementById('nc-accent').value,
+          bgImage:         bgImage,
+          bgImageFilename: bgImageFilename,
+          bio:             bio,
+          stats:           stats,
+        };
+
+        var res  = await fetch('/__new_character__', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload),
+        });
+        var data = await res.json();
+
+        if (!res.ok || !data.success) {
+          errorEl.textContent = data.error || 'Something went wrong.';
+          submitBtn.disabled  = false;
+          submitBtn.textContent = 'Create Character';
+          return;
+        }
+
+        // Inject into page immediately (no reload needed)
+        injectCharacterTheme(data.character);
+        addCharacterSection(data.character, data.bgUrl);
+        addDropdownEntry(data.character, data.bgUrl);
+        closeModal();
+
+        // Scroll to new section
+        setTimeout(function () {
+          var sec = document.getElementById(data.slug);
+          if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 120);
+
+      } catch (err) {
+        errorEl.textContent = 'Network error — is the server running?';
+        submitBtn.disabled  = false;
+        submitBtn.textContent = 'Create Character';
+      }
+    }
+
+    function readFileAsDataURL(file) {
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onload  = function (e) { resolve(e.target.result); };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    /* ================================================================
+       DYNAMIC CHARACTER — inject CSS theme
+    ================================================================ */
+    function injectCharacterTheme(char) {
+      var slug  = char.character;
+      var theme = char.theme || {};
+      var accent     = theme.accent     || '#ffffff';
+      var accentText = theme.accentText || '#000000';
+      var bg         = theme.bg         || '#111111';
+      var text       = theme.text       || '#ffffff';
+      var muted      = theme.textMuted  || 'rgba(255,255,255,0.55)';
+      var borderC    = hexToRgba(accent, 0.50);
+
+      var css = [
+        '#' + slug + ' { background: ' + bg + '; }',
+        '#' + slug + ' .hero-eyebrow { color: ' + accent + '; }',
+        '#' + slug + ' .hero-title   { color: ' + text + '; }',
+        '#' + slug + ' .hero-tagline { color: ' + muted + '; }',
+        '#' + slug + ' .btn-primary  { background: ' + accent + '; color: ' + accentText + '; }',
+        '#' + slug + ' .btn-outline  { color: ' + accent + '; border-color: ' + borderC + '; }',
+        '#' + slug + ' .stats-grid   { background: rgba(255,255,255,0.07); }',
+        '#' + slug + ' .stat-card    { background: ' + bg + '; }',
+        '#' + slug + ' .stat-label   { color: ' + muted + '; }',
+        '#' + slug + ' .stat-value   { color: ' + text + '; }',
+        '#' + slug + ' .details-bio  { color: ' + muted + '; }',
+        '#' + slug + ' .btn-collapse { color: ' + accent + '; border: 1.5px solid ' + borderC + '; }',
+      ].join('\n');
+
+      var style = document.createElement('style');
+      style.textContent = css;
+      document.head.appendChild(style);
+    }
+
+    function hexToRgba(hex, alpha) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) hex = hex.split('').map(function (c) { return c + c; }).join('');
+      var r = parseInt(hex.slice(0, 2), 16);
+      var g = parseInt(hex.slice(2, 4), 16);
+      var b = parseInt(hex.slice(4, 6), 16);
+      return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+    }
+
+    /* ================================================================
+       DYNAMIC CHARACTER — build and insert section
+    ================================================================ */
+    function addCharacterSection(char, bgUrl) {
+      var slug = char.character;
+
+      // Background divs
+      var bgDivs = '';
+      if (bgUrl) {
+        bgDivs =
+          '<div class="section-bg" style="background-image:url(\'' + bgUrl + '\')"></div>' +
+          '<div class="section-overlay"></div>';
+      }
+
+      // Stats cards
+      var statsHtml = (char.stats || []).map(function (s) {
+        return '<div class="stat-card">' +
+          '<span class="stat-label">' + esc(s.label) + '</span>' +
+          '<span class="stat-value">' + esc(s.value) + '</span>' +
+          '</div>';
+      }).join('');
+
+      // First two bio paragraphs for the homepage preview
+      var bioParts = (char.bio || [])
+        .filter(function (b) { return b.type === 'paragraph'; })
+        .slice(0, 2);
+      var bioHtml = bioParts.map(function (b) {
+        return '<p class="details-bio">' + esc(b.text) + '</p>';
+      }).join('');
+
+      var html =
+        '<section class="char-section" id="' + slug + '">' +
+          bgDivs +
+          '<div class="hero-content">' +
+            '<p class="hero-eyebrow">' + esc(char.eyebrow || '') + '</p>' +
+            '<h1 class="hero-title">'  + esc(char.title)         + '</h1>' +
+            '<p class="hero-tagline">' + esc(char.tagline || '')  + '</p>' +
+            '<div class="hero-buttons">' +
+              '<button class="btn-primary" onclick="toggleDetails(\'' + slug + '-panel\', this)">Learn More</button>' +
+              '<a class="btn-outline" href="characters/' + slug + '.html">View Character \u2197</a>' +
+            '</div>' +
+          '</div>' +
+          '<div class="details-panel" id="' + slug + '-panel">' +
+            '<div class="details-inner"><div class="details-content">' +
+              '<div class="stats-grid">' + statsHtml + '</div>' +
+              bioHtml +
+              '<button class="btn-collapse" onclick="toggleDetails(\'' + slug + '-panel\', this)">Close \u2191</button>' +
+            '</div></div>' +
+          '</div>' +
+        '</section>';
+
+      document.querySelector('main').insertAdjacentHTML('beforeend', html);
+
+      // Register with Ken Burns observer
+      var newSection = document.getElementById(slug);
+      if (newSection) kbObserver.observe(newSection);
+    }
+
+    /* ================================================================
+       DYNAMIC CHARACTER — add dropdown entry
+    ================================================================ */
+    function addDropdownEntry(char, bgUrl) {
+      var slug     = char.character;
+      var universe = (char.eyebrow || '').split('·')[0].trim();
+
+      var thumbHtml = bgUrl
+        ? '<img class="dropdown-thumb" src="' + bgUrl + '" alt="' + esc(char.title) +
+          '" loading="lazy" decoding="async">'
+        : '<div class="dropdown-thumb-placeholder" aria-hidden="true">\u2605</div>';
+
+      var html =
+        '<a class="dropdown-char" href="characters/' + slug + '.html">' +
+          thumbHtml +
+          '<span class="dropdown-name">' + esc(char.title) + '</span>' +
+          '<span class="dropdown-sub">'  + esc(universe)   + '</span>' +
+        '</a>';
+
+      document.getElementById('dropdown-grid').insertAdjacentHTML('beforeend', html);
+    }
+
+    /* ================================================================
+       UTILITY — safe HTML escape for JS-built strings
+    ================================================================ */
+    function esc(str) {
+      return (str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+
 </body>
 </html>

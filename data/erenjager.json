@@ -1,0 +1,122 @@
+{
+  "character": "erenjager",
+  "title": "Eren Jaeger",
+  "eyebrow": "Attack on Titan · Paradis Island",
+  "tagline": "Born free. Bound by fate.",
+  "stats": [
+    {
+      "label": "Affiliation",
+      "value": "Scout Regiment"
+    },
+    {
+      "label": "Titan Powers",
+      "value": "Attack · Founding · War Hammer"
+    },
+    {
+      "label": "Home",
+      "value": "Shiganshina District"
+    },
+    {
+      "label": "Goal",
+      "value": "Freedom for Eldia"
+    },
+    {
+      "label": "Series",
+      "value": "Attack on Titan (2009)"
+    },
+    {
+      "label": "Creator",
+      "value": "Hajime Isayama"
+    }
+  ],
+  "bio": [
+    {
+      "type": "paragraph",
+      "text": "Eren Jaeger is the main protagonist of Attack on Titan, a manga series by Hajime Isayama. Born and raised within the walls of Shiganshina District on Paradis Island, Eren spent his childhood dreaming of the world beyond the walls — a vast, free world that humanity had been barred from for over a hundred years. His greatest wish was simple: to see the ocean and explore the world outside."
+    },
+    {
+      "type": "paragraph",
+      "text": "That dream was shattered on the day the Colossal Titan breached Wall Maria. In the chaos that followed, Eren watched helplessly as his mother, Carla Jaeger, was eaten by a Titan. The trauma transformed the idealistic boy into something harder — a vow etched in grief: he would kill every last Titan on earth. He enlisted in the military alongside his childhood friends Mikasa Ackerman and Armin Arlert, determined to join the Scout Regiment and fight back."
+    },
+    {
+      "type": "heading",
+      "text": "The Attack Titan"
+    },
+    {
+      "type": "paragraph",
+      "text": "During a desperate battle in Trost District, Eren discovered he possessed the ability to transform into a Titan — a fifteen-meter humanoid with extraordinary regenerative capabilities and combat strength. This power, later identified as the Attack Titan, had been secretly inherited from his father, Grisha Jaeger, who had injected him with a Titan serum during childhood. The revelation upended Eren's understanding of himself and set him on a collision course with the truth about the world."
+    },
+    {
+      "type": "paragraph",
+      "text": "As the series progressed, Eren uncovered layer after layer of the conspiracy surrounding the Titans, the walls, and the Eldian people. He learned that the walls themselves were constructed from the bodies of Colossal Titans, that the outside world harbored a nation called Marley that had long oppressed Eldians, and that the power of the Titans was passed down through a cycle of death and inheritance limited to thirteen years."
+    },
+    {
+      "type": "heading",
+      "text": "The Founding Titan"
+    },
+    {
+      "type": "paragraph",
+      "text": "Eren eventually came to possess three of the Nine Titans: the Attack Titan, the War Hammer Titan obtained by consuming Lara Tybur, and — most critically — the Founding Titan, accessed through contact with Zeke Jaeger and the royal-blooded Ymir Fritz. The Founding Titan grants its holder god-like authority over all Titans and Subjects of Ymir, including the ability to alter their memories and control their bodies."
+    },
+    {
+      "type": "paragraph",
+      "text": "Using this power, Eren unleashed the Rumbling — activating the Titans within the walls and directing millions of colossal Titans toward Marley and the outside world in a catastrophic march intended to eliminate all threats to Eldia. His decision to pursue this path, sacrificing the lives of countless innocents outside the island, fractured his relationships with his former comrades and forced them to confront whether the boy they once fought alongside had become the very monster they swore to destroy."
+    },
+    {
+      "type": "heading",
+      "text": "A Contested Legacy"
+    },
+    {
+      "type": "paragraph",
+      "text": "Eren Jaeger's arc is one of the most debated in anime and manga history. He began as a passionate, hot-headed idealist — the archetype of a shounen hero — before evolving into a morally complex figure whose methods defied easy categorization. His journey raises questions about freedom, determinism, trauma, and the line between liberation and atrocity. Whether he is a tragic hero, a villain, or something in between remains a point of genuine disagreement among fans."
+    },
+    {
+      "type": "paragraph",
+      "text": "In his final conversation with Armin, Eren revealed that he always knew how his path would end — that the memories of the future, accessible through the Attack Titan's unique ability to inherit past and future memories, had shown him the consequences of his choices long before he made them. He chose the path anyway, driven by a love for his friends and a desperate desire to give them a future, even if it meant becoming the enemy they had to defeat."
+    }
+  ],
+  "images": [
+    {
+      "src": "https://imgur.com/08VjfM8.jpeg",
+      "alt": "Eren Jaeger pose"
+    },
+    {
+      "src": "https://imgur.com/xKddv0r.jpeg",
+      "alt": "Eren determined"
+    },
+    {
+      "src": "https://imgur.com/SMyYg2A.jpeg",
+      "alt": "Eren with Survey Corps"
+    },
+    {
+      "src": "https://imgur.com/43KFBDL.jpeg",
+      "alt": "Eren action"
+    },
+    {
+      "src": "https://imgur.com/BECZO53.jpeg",
+      "alt": "Eren close-up"
+    },
+    {
+      "src": "https://imgur.com/ZOsIIkC.jpeg",
+      "alt": "Founding Titan"
+    },
+    {
+      "src": "https://imgur.com/ZAlcbyf.jpeg",
+      "alt": "Eren transformation"
+    },
+    {
+      "src": "https://imgur.com/s2Y50Yo.jpeg",
+      "alt": "Eren brooding"
+    }
+  ],
+  "theme": {
+    "accent": "#009688",
+    "accentText": "#ffffff",
+    "accentGlow": "rgba(0,150,136,0.10)",
+    "bg": "#f5f5f7",
+    "surface": "rgba(0,0,0,0.04)",
+    "border": "rgba(0,0,0,0.09)",
+    "text": "#1d1d1f",
+    "textMuted": "rgba(29,29,31,0.58)"
+  }
+}

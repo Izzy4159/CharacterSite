@@ -1,150 +1,62 @@
-<!-- characters/batman.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Batman</title>
-
-  <!-- Global styles -->
-  <link rel="stylesheet" href="../styles.css" />
-
-  <!-- Fonts (Anton + Roboto for shared CSS, Comic Neue for Batman paragraphs) -->
+  <title>Loading…</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;500&family=Comic+Neue&display=swap" rel="stylesheet">
-
-  <!-- Shut down server when this tab closes -->
-  <script>
-    function requestShutdown(){try{navigator.sendBeacon("/__shutdown__","bye");}catch(e){}}
-    window.addEventListener("pagehide", requestShutdown);
-    window.addEventListener("beforeunload", requestShutdown);
-  </script>
-
-  <!-- Page-specific paragraph font -->
-  <style>
-    body.batman-page p { font-family: 'Comic Neue', cursive; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../character.css">
 </head>
-<body class="batman-page">
-  <main>
-    <img src="https://imgur.com/KpUUBcT.jpeg"
-         alt="Batman Standing"
-         class="image-left"
-         width="220"
-         loading="eager"
-         fetchpriority="high"
-         decoding="async" />
-    <p>Batman is a superhero who appears in American comic books published by DC Comics. Batman was created by the artist Bob Kane and writer Bill Finger, and debuted in the 27th issue of the comic book <em>Detective Comics</em> on March 30, 1939. In the DC Universe, Batman is the alias of Bruce Wayne, a wealthy American playboy, philanthropist, and industrialist who resides in the fictional Gotham City. His origin story features him swearing vengeance against criminals after witnessing the murder of his parents, Thomas and Martha, as a child—a vendetta tempered by the ideal of justice. He trains himself physically and intellectually, crafts a bat-inspired persona, and monitors the Gotham streets at night.</p>
+<body class="char-body">
 
-    <img src="https://imgur.com/pdkRF4g.jpeg"
-         alt="Batman and Allies"
-         class="image-right"
-         width="220"
-         loading="lazy"
-         decoding="async" />
-    <p>Kane, Finger, and other creators accompanied Batman with supporting characters, including sidekicks Robin and Batgirl; allies Alfred Pennyworth and James Gordon; love interest and occasional adversary Catwoman; and foes such as the Penguin, the Riddler, Two-Face, and his archenemy, the Joker. Kane conceived Batman in early 1939 to capitalize on the popularity of Superman. Although Kane frequently claimed sole creation credit, Finger substantially developed the concept from a generic superhero into something darker and more bat-like. They drew inspiration from pulp fiction characters like the Shadow, Sherlock Holmes, and the Green Hornet.</p>
+  <!-- Sticky top nav -->
+  <nav class="char-nav" aria-label="Character navigation">
+    <a href="../index.html" class="char-back">‹ Characters</a>
+    <span class="edit-badge" id="edit-badge">Editing</span>
+  </nav>
 
-    <img src="https://imgur.com/PgZnaGf.jpeg"
-         alt="Classic Batman Comic"
-         class="image-left"
-         width="220"
-         loading="lazy"
-         decoding="async" />
-    <p>Batman received his own spin-off publication in 1940. Initially introduced as a ruthless vigilante who often killed or maimed criminals, he evolved into a morally tempered hero with a strict no-kill code during the 1940s. Unlike most superheroes, Batman has no superpowers—he relies entirely on his intellect, combat skills, and vast resources. While the 1960s TV series popularized a campy version of the character, later creators returned Batman to his darker roots, culminating in Frank Miller’s influential 1986 miniseries <em>The Dark Knight Returns</em>.</p>
+  <!-- Hero — title, eyebrow, tagline populated by JS -->
+  <section class="char-hero">
+    <p class="char-eyebrow" id="char-eyebrow"></p>
+    <h1 class="char-title"  id="char-title"></h1>
+    <p class="char-tagline" id="char-tagline"></p>
+  </section>
 
-    <img src="https://imgur.com/GZQouut.jpeg"
-         alt="Batman Justice League"
-         class="image-right"
-         width="220"
-         loading="lazy"
-         decoding="async" />
-    <p>Since the 1990s, Batman has been considered DC's flagship character. He regularly appears in major titles, crossovers, and events, including those published under DC's Vertigo and Black Label imprints. In addition to Bruce Wayne, others have taken on the Batman mantle—such as Jean-Paul Valley during the "Knightfall" arc, Dick Grayson (the first Robin), and most recently Jace Fox. Alternate versions of Batman appear throughout Elseworlds stories and major events like <em>The Dark Knight Returns</em> and <em>Flashpoint</em>.</p>
+  <!-- Photo gallery — rendered by JS from JSON images array -->
+  <section class="gallery-section" aria-label="Photo gallery">
+    <div class="gallery-grid" id="gallery-grid"></div>
 
-    <h2>Bruce Wayne</h2>
-    <img src="https://imgur.com/RtaqaLN.jpeg"
-         alt="Bruce Wayne"
-         class="image-left"
-         width="220"
-         loading="lazy"
-         decoding="async" />
-    <p>Batman's secret identity is Bruce Wayne, a wealthy American industrialist. After witnessing the murder of his parents, Bruce chose to dedicate his life to fighting crime. He lives at Wayne Manor on the outskirts of Gotham City and publicly maintains the image of a carefree billionaire. In reality, Bruce is a teetotaler and uses his playboy image to deflect suspicion from his crime-fighting identity. Through the Wayne Foundation, he funds social programs addressing crime and poverty, while operating as Batman during the night.</p>
+    <!-- Add-photo UI — only visible in edit mode (CSS controlled) -->
+    <div class="add-photo-wrap" id="add-photo-wrap">
+      <label class="add-photo-btn" for="photo-input">+ Add Photo</label>
+      <input type="file" id="photo-input" accept="image/*" multiple>
+    </div>
+  </section>
 
-    <p>Though not especially religious, Bruce is ethnically Jewish on his mother's side and was raised Christian by his father. Writers often portray Bruce Wayne as the true identity with Batman being his mission. Others argue the reverse—that Batman is the real personality and Bruce the mask. Regardless, Bruce is driven by principle, determined to prevent others from suffering as he did. His vow against killing remains one of his most defining moral codes.</p>
+  <!-- Stats + bio — rendered by JS from JSON -->
+  <section class="info-section" aria-label="Character info">
+    <div class="info-inner">
+      <div class="stats-grid" id="stats-grid"></div>
+      <div class="bio-wrap"   id="bio-wrap"></div>
+    </div>
+  </section>
 
-    <h2>Abilities</h2>
-    <img src="https://imgur.com/66q1PK5.jpeg"
-         alt="Batman Fighting Skills"
-         class="image-right"
-         width="220"
-         loading="lazy"
-         decoding="async" />
-    <p><strong>Skills and Training:</strong><br>Batman has no inherent superpowers. Instead, he depends on an extraordinary combination of scientific expertise, detective ability, physical conditioning, and wealth. He is often described as one of the smartest characters in the DC Universe, mastering disciplines such as engineering, chemistry, biology, and technology. He is fluent in many languages, and is a world-class martial artist, having trained in over 127 fighting styles. His photographic memory and intense mental discipline allow him to strategize, analyze, and outthink even the most powerful foes.</p>
+  <!-- Floating action buttons -->
+  <div class="fab-group" aria-label="Page actions">
+    <!-- Save — only visible in edit mode (CSS controlled) -->
+    <button class="fab fab-save" id="fab-save" onclick="saveData()">Save Changes</button>
+    <!-- Edit toggle — always visible -->
+    <button class="fab fab-edit" id="fab-edit" onclick="toggleEdit()"
+            aria-label="Toggle edit mode">
+      <span class="fab-icon" aria-hidden="true">✏</span>
+    </button>
+  </div>
 
-    <p>Batman can resist telepathy, endure extreme pain, and escape near-impossible traps. He is known for his disguise skills and frequently operates under the alias Matches Malone for undercover work. His stealth abilities make him nearly invisible when he chooses, and his escape artistry is unmatched. Batman is widely regarded as DC's best tactician, often creating backup plans for even the most unpredictable scenarios—sometimes including contingency plans to neutralize his own allies, should the need arise.</p>
-
-    <h2>Legacy and Popularity</h2>
-    <img src="https://imgur.com/cBA3JAG.jpeg"
-         alt="Batman Symbol"
-         class="image-left"
-         width="220"
-         loading="lazy"
-         decoding="async" />
-    <p>Batman is one of the most iconic and enduring superheroes of all time. He has been featured in virtually every form of media, from comic books to television, film, and video games. His voice has been most prolifically portrayed by Kevin Conroy in animation and games, while actors like Adam West, Michael Keaton, Val Kilmer, George Clooney, Christian Bale, Ben Affleck, and Robert Pattinson have brought him to life in live-action film.</p>
-
-    <p>The character’s popularity spans generations. Batman has inspired successful toy lines like LEGO Batman, video games such as the <em>Arkham</em> series, and numerous critically acclaimed comic runs. In 2024, Batman became the first superhero to receive a star on the Hollywood Walk of Fame—cementing his place as a pop culture legend.</p>
-  
-    <h2>Enemies</h2>
-    <p>Batman faces a variety of foes ranging from common criminals to outlandish supervillains. Many of them mirror aspects of the Batman's character and development, often having tragic origin stories that lead them to a life of crime. These foes are commonly referred to as Batman's rogues gallery. Batman's "most implacable foe" is the Joker, a homicidal maniac with a clown-like appearance. The Joker is considered by critics to be his perfect adversary, since he is the antithesis of Batman in personality and appearance; the Joker has a maniacal demeanor with a colorful appearance, while Batman has a serious and resolute demeanor with a dark appearance. Other long-time recurring foes that are part of Batman's rogues gallery include Catwoman (a cat burglar anti-heroine who is variously an ally and romantic interest), the Penguin, Ra's al Ghul, Two-Face (Harvey Dent), the Riddler, the Scarecrow, Mr. Freeze, Poison Ivy, Harley Quinn, Bane, Clayface, and Killer Croc, among others. Many of Batman's adversaries are often psychiatric patients at Arkham Asylum.</p>
-
-    <h2>Allies</h2>
-    <img src="https://imgur.com/xdsfQ9M.jpeg"
-         alt="Batman Allies"
-         class="image-right"
-         width="220"
-         loading="lazy"
-         decoding="async" />
-    <p>Alfred Pennyworth, Batman's loyal butler and father figure, first appeared in Batman #16 (1943). After Bruce Wayne's parents were killed, Alfred raised Bruce and became one of the few people to know his secret identity. He is often portrayed as a steadying presence in Bruce's life, offering both emotional support and practical assistance in Batman's crime-fighting endeavors. More than just a caretaker, Alfred is a trusted ally and sometimes sidekick, sharing Wayne Manor with Bruce and contributing to Batman's mission.</p>
-    <p>One of Batman's most crucial allies is Commissioner James Gordon. Their relationship is built on mutual respect and a shared commitment to justice in Gotham City. In Batman: Year One, Gordon and Batman learn to trust each other, which transforms their efforts against crime into a more effective partnership. Gordon's perspective as a police officer complements Batman's vigilantism, allowing them to tackle Gotham's challenges together. Another important ally is the Justice League, which further emphasizes the importance of collaboration. Batman's relationship with Superman showcases how their contrasting ideologies can complement each other. In stories like World's Finest, their friendship highlights how Batman's methods benefit from Superman's optimism and strength.</p>
-  
-    <h2>Technology</h2>
-    <p>Batman utilizes a vast arsenal of specialized, high-tech vehicles and gadgets in his war against crime, the designs of which usually share a bat motif. Batman historian Les Daniels credits Gardner Fox with creating the concept of Batman's arsenal with the introduction of the utility belt in Detective Comics #29 (July 1939) and the first bat-themed weapons the batarang and the "Batgyro" in Detective Comics #31 and 32 (Sept. and October 1939).</p>
-    <p>Batman's batsuit aids in his combat against enemies, having the properties of both Kevlar and Nomex. It protects him from gunfire and other significant impacts, and incorporates the imagery of a bat in order to frighten criminals.</p>
-  
-    <p>The details of the Batman costume change repeatedly through various decades, stories, media and artists' interpretations, but the most distinctive elements remain consistent: a scallop-hem cape; a cowl covering most of the face; a pair of bat-like ears; a stylized bat emblem on the chest; and the ever-present utility belt. His gloves typically feature three scallops that protrude from long, gauntlet-like cuffs, although in his earliest appearances he wore short, plain gloves without the scallops.</p>
-
-    <p>Finger and Kane originally conceptualized Batman as having a black cape and cowl and grey suit, but conventions in coloring called for black to be highlighted with blue. Hence, the costume's colors have appeared in the comics as dark blue and grey; as well as black and grey. In the Tim Burton films, Batman has been depicted as completely black with a bat in the middle surrounded by a yellow background. Christopher Nolan's trilogy depicted Batman wearing high-tech gear painted completely black with a black bat in the middle. Ben Affleck's Batman in the DCEU wears a suit grey in color with a black cowl, cape, and bat symbol. Robert Pattinson's uniform in *The Batman* restores the more traditional gray bodysuit and black appendage design, notably using real-world armor and apparel pieces.</p>
-
-    <p><strong>Batcave:</strong> The Batcave is Batman's secret headquarters, consisting of a series of caves beneath his mansion, Wayne Manor. As his command center, the Batcave serves multiple purposes; supercomputer, surveillance, redundant power-generators, forensics lab, medical infirmary, private study, training dojo, fabrication workshop, arsenal, hangar and garage. It houses the vehicles and equipment Batman uses in his campaign to fight crime. It is also a trophy room and storage facility for Batman's unique memorabilia collected over the years from various cases he has worked on.</p>
-  
-    <h2>Personality</h2>
-    <p>Batman, in most of his incarnations, is a dark and brooding hero with a personal vendetta against crime and injustice. Psychologically traumatized by the death of his parents, Batman has sworn to rid Gotham from the criminal elements that took his parents away from him. He is extremely pessimistic and suspicious, which often makes it difficult for him to trust people other than Alfred, Commissioner Gordon, Lucius Fox, the Robins, or the Batgirls.</p>
-      
-    <p>Despite this, Batman has proved to have a great love for humanity, which was instilled by his parents. His father was a doctor, while his mother was a crusader against child abuse. Indeed, Batman's oath of vengeance is tempered with the greater ideal of justice. He refrains from killing, as he feels this would not make him any better than the criminals he fights. He is also a very prominent member of the Justice League and the founder of the Outsiders.</p>
-  
-    <p>Peak Human Condition: Through intense training, a specialized diet, and meditation, Batman represents the absolute pinnacle of human physical prowess. His physical attributes are at the natural limits far above those of any Olympic-level athlete that has ever competed. His strength, speed, stamina, agility, reflexes, senses, healing, and endurance are at the peak of human potential and perfection. Batman began his physical and mental conditioning when he was 10 and then began intense physical training and weight lifting at age 12. He had mastered full-body control by the time he was 18. Bruce Wayne, since the age of 15, has created a strict diet to enable his body to develop and operate at its most proficient, along with biofeedback treatments. Batman's ability to perform incredible physical feats is due to his superior physique. He has often defeated opponents whose size, strength, or other powers far exceeded his own. He has dedicated his life to achieving physical perfection and has attained it through constant, intensive training and unwavering determination. Following his recent exposure to Dionesium, he has become significantly stronger and faster than ever before. Additionally, he has mastered the art of power naps and evolved it into what he refers to as "microsleep." Although these periods of sleep are shorter in duration (1 hour), they would be more replenishing and much harder to wake up from. Batman has also been shown to be capable of going over 4 days without sleep at all.</p>
-  </main>
-
-  <!-- Bottom center orange CTA button -->
-  <button class="cta-btn" aria-label="Back to Characters Menu" onclick="location.href='../index.html'">
-    Back to Characters
-  </button>
-
-  <script>
-    // Ripple on click
-    const btn = document.querySelector('.cta-btn');
-    btn.addEventListener('click', function(e){
-      const rect = this.getBoundingClientRect();
-      const diameter = Math.max(this.clientWidth, this.clientHeight);
-      const radius = diameter / 2;
-      const ripple = document.createElement('span');
-      ripple.classList.add('ripple');
-      ripple.style.width = ripple.style.height = `${diameter}px`;
-      ripple.style.left = `${e.clientX - rect.left - radius}px`;
-      ripple.style.top  = `${e.clientY - rect.top  - radius}px`;
-      const prev = this.querySelector('.ripple');
-      if (prev) prev.remove();
-      this.appendChild(ripple);
-    });
-  </script>
+  <!-- character.js derives the slug from the filename, fetches
+       ../data/batman.json, renders everything, and wires up
+       toggleEdit() / saveData() / photo upload. -->
+  <script src="../character.js"></script>
 </body>
 </html>

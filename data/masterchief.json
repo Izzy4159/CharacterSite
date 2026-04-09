@@ -1,0 +1,49 @@
+{
+  "character": "masterchief",
+  "title": "Master Chief",
+  "eyebrow": "Halo · UNSC",
+  "tagline": "Humanity's last line of defense.",
+  "stats": [
+    { "label": "Designation", "value": "John-117" },
+    { "label": "Program",     "value": "SPARTAN-II" },
+    { "label": "Branch",      "value": "UNSC Naval Spec. Warfare" },
+    { "label": "Armor",       "value": "MJOLNIR Powered Assault" },
+    { "label": "Born",        "value": "2511 · Eridanus II" },
+    { "label": "Voiced By",   "value": "Steve Downes" }
+  ],
+  "bio": [
+    { "type": "paragraph", "text": "Master Chief Petty Officer John-117, more commonly known as Master Chief, is a SPARTAN-II commando of the UNSC Naval Special Warfare Command. He is the protagonist and main character in both the Halo trilogy and Reclaimer Saga. With over thirty years of active duty service, he has become one of the most decorated war veterans in the United Nations Space Command, earning every known UNSC medal except the Prisoner of War Medallion." },
+    { "type": "heading", "text": "Childhood and Early Life" },
+    { "type": "paragraph", "text": "John was born in 2511 and lived with his mother and father in Elysium City on the colony world of Eridanus II. He attended the Elysium City Primary Education Facility Number 119. As a child, John had brown hair, freckles, and a small gap between his front teeth. A childhood friend, the would-be Marine Lieutenant Parisa, was once saved from drowning by John at Lake Gusev, after which John promised to marry and protect her." },
+    { "type": "paragraph", "text": "Dr. Catherine Halsey identified John as an ideal physical and mental candidate for the SPARTAN-II Program when he was six: he stood a head taller than the majority of his schoolmates, had greater physical proportions, and possessed greater strength, superior reflexes, and an aggressive drive for success. When Dr. Halsey and Lieutenant Jacob Keyes visited Eridanus II in 2517 to study him, they were impressed with his intellect and luck. In a final test of his viability as a candidate, John caught a tossed coin mid-air and correctly identified the face-up side — hinting at an almost supernatural instinct." },
+    { "type": "heading", "text": "Spartan-II Training" },
+    { "type": "paragraph", "text": "In 2517, John and 74 other six-year-old children were covertly kidnapped from their homes and replaced with flash clones. John was taken to the planet Reach, where Dr. Halsey informed them they would be 'the protectors of Earth and all her colonies.' He trained with other Spartans under Chief Petty Officer Franklin Mendez for eight years, learning history, military strategy, weapons, and physical fitness. He bonded with Kelly and Sam, who would become two of the few close friends he would ever have." },
+    { "type": "paragraph", "text": "In a pivotal training exercise, Spartans were dropped over a forest and expected to reach an extraction Pelican. The Pelican was guarded by disguised UNSC Marines. John showed early acumen in critical thinking by devising a plan to take the men down, capture the dropship, and ensure the safe extraction of every team member. He was the last person aboard. Chief Mendez was visibly displeased by John's having attacked his Marines, but both Mendez and Halsey recognized John's initiative and promoted him to squad leader." },
+    { "type": "paragraph", "text": "At the age of fourteen, John underwent the dangerous SPARTAN-II augmentation procedures. These procedures killed 30 and physically disabled 12 of the Spartan trainees. John was one of 33 Spartans who survived the process unscathed. At only fourteen years old, John was said to have the body of an eighteen-year old Olympic athlete — the augmentation process hastened their reflexes, increased their strength, enhanced their eyesight, and rendered their bones nearly unbreakable." },
+    { "type": "heading", "text": "MJOLNIR Armor & Equipment" },
+    { "type": "paragraph", "text": "As a Spartan-II, John combines elite training, tactical brilliance, and augmented physiology with MJOLNIR powered armor to execute high-risk objectives against overwhelming odds. The MJOLNIR Powered Assault Armor is a powered exoskeleton that amplifies the Spartan's already superhuman strength, speed, and reflexes. It also features integrated AI support, energy shielding, and a heads-up display that provides real-time tactical information." },
+    { "type": "paragraph", "text": "Designed for player projection, Chief's face remains concealed and his dialogue measured throughout the games. In-game he is voiced by Steve Downes, while live-action portrayals include Pablo Schreiber in the Paramount+ series. Chief is widely regarded as a video-game icon and a mascot for both Halo and Xbox, and later entries in the series explored his humanity and his profound bond with the AI Cortana." },
+    { "type": "heading", "text": "Legacy" },
+    { "type": "paragraph", "text": "Master Chief Petty Officer John-117 has become one of gaming's most iconic characters. Beginning with Combat Evolved in 2001, the Halo franchise revolutionized first-person shooters on consoles and helped establish Xbox as a major gaming platform. Over thirty years of in-universe service — fighting the Covenant, the Flood, and later the Prometheans — have cemented his status as humanity's greatest warrior and its last, best hope against extinction-level threats." }
+  ],
+  "images": [
+    { "src": "https://imgur.com/NG4uqLb.jpeg", "alt": "Master Chief hero pose" },
+    { "src": "https://imgur.com/lIkU1u8.jpeg", "alt": "MJOLNIR armor close-up" },
+    { "src": "https://imgur.com/yaENl84.jpeg", "alt": "Halo franchise montage" },
+    { "src": "https://imgur.com/m50hQer.jpeg", "alt": "Young John-117 on Eridanus II" },
+    { "src": "https://imgur.com/6JXTNvQ.jpeg", "alt": "Coin test with Dr. Halsey" },
+    { "src": "https://imgur.com/AOMIFiR.jpeg", "alt": "Spartan-II boot camp" },
+    { "src": "https://imgur.com/nvPlFNA.jpeg", "alt": "Training exercise in snowy mountains" },
+    { "src": "https://imgur.com/rovEuOM.jpeg", "alt": "Master Chief with MJOLNIR armor and rifle" }
+  ],
+  "theme": {
+    "accent":     "#00e676",
+    "accentText": "#000000",
+    "accentGlow": "rgba(0,230,118,0.10)",
+    "bg":         "#060e06",
+    "surface":    "rgba(255,255,255,0.04)",
+    "border":     "rgba(255,255,255,0.08)",
+    "text":       "#e8f5e9",
+    "textMuted":  "rgba(200,230,200,0.55)"
+  }
+}
