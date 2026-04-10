@@ -607,6 +607,85 @@
     }
 
     /* ================================================================
+       BG EDIT BUTTON — left-edge of each section, visible on hover only
+    ================================================================ */
+    .bg-edit-btn {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      width: 36px;
+      height: 60px;
+      border-radius: 0 10px 10px 0;
+      border: none;
+      background: rgba(255, 255, 255, 0.11);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: rgba(255, 255, 255, 0.70);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease, background 0.18s, color 0.18s;
+    }
+    .char-section:hover .bg-edit-btn {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .bg-edit-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+    }
+    /* On light-theme sections (Eren) use dark tint */
+    #eren .bg-edit-btn {
+      background: rgba(0, 0, 0, 0.10);
+      color: rgba(0, 0, 0, 0.55);
+    }
+    #eren .bg-edit-btn:hover {
+      background: rgba(0, 0, 0, 0.20);
+      color: rgba(0, 0, 0, 0.85);
+    }
+
+    /* ================================================================
+       BG EDIT MODAL — compact, focused
+    ================================================================ */
+    .bg-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .bg-modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .bg-modal-card {
+      background: #1c1c1e;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 22px;
+      width: min(420px, 100%);
+      padding: 28px 26px 24px;
+      transform: scale(0.95) translateY(12px);
+      transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+    .bg-modal-backdrop.open .bg-modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    /* ================================================================
        RESPONSIVE
     ================================================================ */
     @media (max-width: 900px) {
@@ -636,7 +715,8 @@
       .details-panel, .mega-dropdown, .section-bg,
       .char-section, .btn-primary, .btn-outline,
       .btn-collapse, .add-char-fab, .modal-backdrop,
-      .modal-card { transition: none; animation: none; }
+      .modal-card, .bg-modal-backdrop, .bg-modal-card,
+      .bg-edit-btn { transition: none; animation: none; }
     }
   </style>
 </head>
@@ -710,6 +790,12 @@
     <section class="char-section" id="batman">
       <div class="section-bg" style="background-image:url('https://imgur.com/KpUUBcT.jpeg')"></div>
       <div class="section-overlay"></div>
+      <button class="bg-edit-btn" onclick="openBgModal('batman','batman')"
+              title="Change background image" aria-label="Change Batman background image">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
+        </svg>
+      </button>
       <div class="hero-content">
         <p class="hero-eyebrow">DC Comics &middot; 1939</p>
         <h1 class="hero-title">Batman</h1>
@@ -743,6 +829,12 @@
     <section class="char-section" id="sasuke">
       <div class="section-bg" style="background-image:url('https://i.imgur.com/uHXkjvE.jpeg')"></div>
       <div class="section-overlay"></div>
+      <button class="bg-edit-btn" onclick="openBgModal('sasuke','sasuke')"
+              title="Change background image" aria-label="Change Sasuke background image">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
+        </svg>
+      </button>
       <div class="hero-content">
         <p class="hero-eyebrow">Naruto &middot; Konohagakure</p>
         <h1 class="hero-title">Sasuke</h1>
@@ -776,6 +868,12 @@
     <section class="char-section" id="masterchief">
       <div class="section-bg" style="background-image:url('https://imgur.com/NG4uqLb.jpeg')"></div>
       <div class="section-overlay"></div>
+      <button class="bg-edit-btn" onclick="openBgModal('masterchief','masterchief')"
+              title="Change background image" aria-label="Change Master Chief background image">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
+        </svg>
+      </button>
       <div class="hero-content">
         <p class="hero-eyebrow">Halo &middot; UNSC</p>
         <h1 class="hero-title">Master Chief</h1>
@@ -807,6 +905,12 @@
          EREN JAEGER  (light theme — no bg photo)
     ================================================================ -->
     <section class="char-section" id="eren">
+      <button class="bg-edit-btn" onclick="openBgModal('erenjager','eren')"
+              title="Change background image" aria-label="Change Eren background image">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
+        </svg>
+      </button>
       <div class="hero-content">
         <p class="hero-eyebrow">Attack on Titan &middot; Paradis Island</p>
         <h1 class="hero-title">Eren Jaeger</h1>
@@ -838,6 +942,12 @@
          ZUKO  (dark, no bg photo yet)
     ================================================================ -->
     <section class="char-section" id="zuko">
+      <button class="bg-edit-btn" onclick="openBgModal('zuko','zuko')"
+              title="Change background image" aria-label="Change Zuko background image">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
+        </svg>
+      </button>
       <div class="hero-content">
         <p class="hero-eyebrow">Avatar: The Last Airbender &middot; Fire Nation</p>
         <h1 class="hero-title">Zuko</h1>
@@ -981,6 +1091,29 @@
     </div>
   </div>
 
+  <!-- ================================================================
+       BG EDIT MODAL
+  ================================================================ -->
+  <div class="bg-modal-backdrop" id="bg-modal-backdrop" aria-modal="true" role="dialog"
+       aria-labelledby="bg-modal-title">
+    <div class="bg-modal-card">
+      <div class="modal-header">
+        <span class="modal-title" id="bg-modal-title">Change Background</span>
+        <button class="modal-close" onclick="closeBgModal()" aria-label="Close">✕</button>
+      </div>
+      <form id="bg-edit-form" onsubmit="submitBgEdit(event)" autocomplete="off">
+        <input type="hidden" id="bg-char-slug">
+        <input type="hidden" id="bg-section-id">
+        <div class="form-row">
+          <label class="form-label" for="bg-file-input">New Background Image</label>
+          <input class="form-input" id="bg-file-input" type="file" accept="image/*" required>
+        </div>
+        <p class="modal-error" id="bg-modal-error" aria-live="polite"></p>
+        <button class="modal-submit" type="submit" id="bg-modal-submit">Upload &amp; Apply</button>
+      </form>
+    </div>
+  </div>
+
   <script>
     /* ================================================================
        EXPAND / COLLAPSE PANELS
@@ -1070,10 +1203,12 @@
       if (e.target === this) closeModal();
     });
 
-    // Close on Escape
+    // Close on Escape (handles both modals)
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' &&
-          document.getElementById('modal-backdrop').classList.contains('open')) {
+      if (e.key !== 'Escape') return;
+      if (document.getElementById('bg-modal-backdrop').classList.contains('open')) {
+        closeBgModal();
+      } else if (document.getElementById('modal-backdrop').classList.contains('open')) {
         closeModal();
       }
     });
@@ -1298,6 +1433,119 @@
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
+    }
+
+    /* ================================================================
+       BG EDIT MODAL — open / close / submit
+    ================================================================ */
+    function openBgModal(slug, sectionId) {
+      document.getElementById('bg-char-slug').value  = slug;
+      document.getElementById('bg-section-id').value = sectionId || slug;
+      document.getElementById('bg-file-input').value = '';
+      document.getElementById('bg-modal-error').textContent = '';
+      var btn = document.getElementById('bg-modal-submit');
+      btn.disabled = false;
+      btn.textContent = 'Upload & Apply';
+      document.getElementById('bg-modal-backdrop').classList.add('open');
+    }
+
+    function closeBgModal() {
+      document.getElementById('bg-modal-backdrop').classList.remove('open');
+      document.getElementById('bg-edit-form').reset();
+      document.getElementById('bg-modal-error').textContent = '';
+    }
+
+    document.getElementById('bg-modal-backdrop').addEventListener('click', function (e) {
+      if (e.target === this) closeBgModal();
+    });
+
+    async function submitBgEdit(e) {
+      e.preventDefault();
+      var slug      = document.getElementById('bg-char-slug').value;
+      var sectionId = document.getElementById('bg-section-id').value;
+      var file      = document.getElementById('bg-file-input').files[0];
+      var errorEl   = document.getElementById('bg-modal-error');
+      var btn       = document.getElementById('bg-modal-submit');
+
+      if (!file) { errorEl.textContent = 'Please select an image.'; return; }
+
+      errorEl.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Uploading\u2026';
+
+      try {
+        var dataUrl = await readFileAsDataURL(file);
+        var res = await fetch('/__set_bg__', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            character: slug,
+            sectionId: sectionId,
+            filename:  file.name,
+            data:      dataUrl,
+          }),
+        });
+        var data = await res.json();
+
+        if (!res.ok || !data.success) {
+          errorEl.textContent = data.error || 'Upload failed.';
+          btn.disabled = false;
+          btn.textContent = 'Upload & Apply';
+          return;
+        }
+
+        // ── Update section background immediately ──────────────────
+        var section = document.getElementById(sectionId);
+        if (section) {
+          var bg = section.querySelector('.section-bg');
+          if (bg) {
+            bg.style.backgroundImage = 'url(\'' + data.url + '\')';
+            // Restart Ken Burns animation
+            bg.classList.remove('kb-play');
+            void bg.offsetWidth;
+            bg.classList.add('kb-play');
+          } else {
+            // No bg div yet — create and insert before hero-content
+            var heroContent = section.querySelector('.hero-content');
+            var bgDiv = document.createElement('div');
+            bgDiv.className = 'section-bg';
+            bgDiv.style.backgroundImage = 'url(\'' + data.url + '\')';
+            var overlayDiv = document.createElement('div');
+            overlayDiv.className = 'section-overlay';
+            section.insertBefore(overlayDiv, heroContent);
+            section.insertBefore(bgDiv, overlayDiv);
+            void bgDiv.offsetWidth;
+            bgDiv.classList.add('kb-play');
+            kbObserver.observe(section);
+          }
+        }
+
+        // ── Update dropdown thumbnail ──────────────────────────────
+        var dropLink = document.querySelector(
+          '.dropdown-char[href="characters/' + slug + '.html"]'
+        );
+        if (dropLink) {
+          var oldThumb = dropLink.querySelector('.dropdown-thumb, .dropdown-thumb-placeholder');
+          var newImg = document.createElement('img');
+          newImg.className = 'dropdown-thumb';
+          newImg.src = data.url;
+          newImg.alt = slug;
+          newImg.loading = 'lazy';
+          newImg.decoding = 'async';
+          if (oldThumb) {
+            oldThumb.replaceWith(newImg);
+          } else {
+            dropLink.prepend(newImg);
+          }
+        }
+
+        closeBgModal();
+
+      } catch (err) {
+        errorEl.textContent = 'Network error \u2014 is the server running?';
+        btn.disabled = false;
+        btn.textContent = 'Upload & Apply';
+      }
     }
   </script>
 

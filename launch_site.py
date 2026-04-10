@@ -158,6 +158,9 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
         elif path == "/__new_character__":
             self._handle_new_character()
 
+        elif path == "/__set_bg__":
+            self._handle_set_bg()
+
         else:
             self.send_error(404, "Not found")
 
@@ -312,6 +315,131 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
 
         except Exception as e:
             self._json_error(500, str(e))
+
+    # ── Set / replace a section background image ─────────────────────
+    def _handle_set_bg(self):
+        try:
+            length = int(self.headers.get("Content-Length", "0") or 0)
+            raw = self.rfile.read(length) if length else b"{}"
+            data = json.loads(raw.decode("utf-8"))
+
+            character  = data.get("character", "").lower().strip()
+            section_id = data.get("sectionId", character).lower().strip() or character
+            filename   = data.get("filename", "bg.jpg").strip()
+            b64data    = data.get("data", "")
+
+            if not character or not re.match(r'^[a-z0-9_-]+$', character):
+                self._json_error(400, "Invalid character name")
+                return
+            if not b64data:
+                self._json_error(400, "No image data provided")
+                return
+
+            # Sanitise filename; save as "bg<ext>" so it always overwrites
+            filename = re.sub(r'[^\w\-.]', '_', filename) or "bg.jpg"
+            _, ext = os.path.splitext(filename)
+            ext = ext.lower() if ext else ".jpg"
+            bg_filename = f"bg{ext}"
+
+            if "," in b64data:
+                b64data = b64data.split(",", 1)[1]
+            raw_bytes = base64.b64decode(b64data + "==")
+
+            img_dir = os.path.join("images", character)
+            os.makedirs(img_dir, exist_ok=True)
+            out_path = os.path.join(img_dir, bg_filename)
+            with open(out_path, "wb") as f:
+                f.write(raw_bytes)
+
+            bg_url = f"/images/{character}/{bg_filename}"
+
+            # Update data/<character>.json
+            json_path = os.path.join("data", f"{character}.json")
+            if os.path.exists(json_path):
+                with open(json_path, "r", encoding="utf-8") as f:
+                    char_data = json.load(f)
+                char_data["bgImage"] = bg_url
+                with open(json_path, "w", encoding="utf-8") as f:
+                    json.dump(char_data, f, indent=2, ensure_ascii=False)
+
+            # Patch index.html — section uses section_id, dropdown uses character slug
+            index_path = "index.html"
+            if os.path.exists(index_path):
+                with open(index_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                content = self._patch_section_bg_url(content, section_id, bg_url)
+                content = self._patch_dropdown_bg_url(content, character, bg_url)
+                with open(index_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+
+            self._json_ok({"success": True, "url": bg_url})
+        except Exception as e:
+            self._json_error(500, str(e))
+
+    @staticmethod
+    def _patch_section_bg_url(content, section_id, new_url):
+        """Update or insert .section-bg inside the <section id="section_id"> element."""
+        sec_pat = re.compile(
+            r'(<section\b[^>]*\bid="' + re.escape(section_id) + r'"[^>]*>)',
+            re.DOTALL
+        )
+        sec_m = sec_pat.search(content)
+        if not sec_m:
+            return content
+
+        sec_end = sec_m.end()
+        # Look for an existing section-bg div within the next 600 chars
+        window = content[sec_end:sec_end + 600]
+        bg_pat = re.compile(
+            r'<div class="section-bg" style="background-image:url\(\'([^\']*)\'\)"></div>'
+        )
+        bg_m = bg_pat.search(window)
+
+        if bg_m:
+            # Replace URL in existing div
+            abs_s = sec_end + bg_m.start()
+            abs_e = sec_end + bg_m.end()
+            replacement = f'<div class="section-bg" style="background-image:url(\'{new_url}\')"></div>'
+            content = content[:abs_s] + replacement + content[abs_e:]
+        else:
+            # No bg div yet — insert bg + overlay right after the section opening tag
+            insert = (
+                f'\n      <div class="section-bg" style="background-image:url(\'{new_url}\')"></div>'
+                f'\n      <div class="section-overlay"></div>'
+            )
+            content = content[:sec_end] + insert + content[sec_end:]
+
+        return content
+
+    @staticmethod
+    def _patch_dropdown_bg_url(content, slug, new_url):
+        """Update or insert the dropdown thumbnail img for the given slug."""
+        link_pat = re.compile(
+            r'(<a class="dropdown-char" href="characters/' + re.escape(slug) + r'\.html">)'
+            r'(.*?)'
+            r'(</a>)',
+            re.DOTALL
+        )
+        link_m = link_pat.search(content)
+        if not link_m:
+            return content
+
+        inner = link_m.group(2)
+        new_thumb = (
+            f'<img class="dropdown-thumb" src="{new_url}" '
+            f'alt="{_h(slug)}" loading="lazy" decoding="async">'
+        )
+        # Replace existing img or placeholder div
+        inner_new = re.sub(
+            r'<img class="dropdown-thumb"[^>]+>|'
+            r'<div class="dropdown-thumb-placeholder"[^>]*>.*?</div>',
+            new_thumb,
+            inner,
+            count=1,
+            flags=re.DOTALL,
+        )
+        content = content[:link_m.start(2)] + inner_new + content[link_m.end(2):]
+        return content
 
     # ── Patch index.html: inject style + section + dropdown entry ────
     def _patch_index_html(self, char, bg_url):
