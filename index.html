@@ -66,6 +66,38 @@
     }
     .nav-trigger:hover { color: #f5f5f7; background: rgba(255,255,255,0.06); }
 
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .copy-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(245,245,247,0.75);
+      font-size: 12px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 5px 11px;
+      border-radius: 20px;
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .copy-link-btn:hover {
+      color: #f5f5f7;
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.32);
+    }
+    .copy-link-btn.copied {
+      color: #30d158;
+      border-color: #30d158;
+    }
+
     .nav-chevron {
       display: inline-block;
       font-size: 11px;
@@ -234,11 +266,13 @@
     }
 
     .hero-title {
-      font-size: clamp(68px, 11vw, 112px);
+      font-size: clamp(40px, 11vw, 112px);
       font-weight: 800;
       letter-spacing: -3px;
       line-height: 0.94;
       margin-bottom: 22px;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     .hero-tagline {
@@ -607,17 +641,29 @@
     }
 
     /* ================================================================
-       BG EDIT BUTTON — left-edge of each section, visible on hover only
+       LEFT-EDGE EDIT BUTTONS — bg + style, grouped, hover only
     ================================================================ */
-    .bg-edit-btn {
+    .section-left-btns {
       position: absolute;
       left: 0;
       top: 50%;
       transform: translateY(-50%);
       z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    .char-section:hover .section-left-btns {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .section-left-btn {
       width: 36px;
-      height: 60px;
-      border-radius: 0 10px 10px 0;
+      height: 36px;
+      border-radius: 0 8px 8px 0;
       border: none;
       background: rgba(255, 255, 255, 0.11);
       backdrop-filter: blur(10px);
@@ -628,27 +674,30 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.22s ease, background 0.18s, color 0.18s;
+      transition: background 0.18s, color 0.18s;
     }
-    .char-section:hover .bg-edit-btn {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .bg-edit-btn:hover {
+    .section-left-btn:hover {
       background: rgba(255, 255, 255, 0.22);
       color: #ffffff;
     }
-    /* On light-theme sections (Eren) use dark tint */
-    #eren .bg-edit-btn {
+    /* Light-theme Eren variant */
+    #eren .section-left-btn {
       background: rgba(0, 0, 0, 0.10);
       color: rgba(0, 0, 0, 0.55);
     }
-    #eren .bg-edit-btn:hover {
+    #eren .section-left-btn:hover {
       background: rgba(0, 0, 0, 0.20);
       color: rgba(0, 0, 0, 0.85);
     }
+
+    /* ================================================================
+       VIEW-ONLY MODE — hide all edit controls for network visitors
+    ================================================================ */
+    html.view-only .section-left-btns,
+    html.view-only .add-char-fab,
+    html.view-only .modal-backdrop,
+    html.view-only .bg-modal-backdrop,
+    html.view-only .style-modal-backdrop { display: none !important; }
 
     /* ================================================================
        BG EDIT MODAL — compact, focused
@@ -685,6 +734,134 @@
       transform: scale(1) translateY(0);
     }
 
+    /* ── Drag-drop zone inside the bg modal ── */
+    .bg-drop-zone {
+      position: relative;
+      border: 2px dashed rgba(255, 255, 255, 0.22);
+      border-radius: 14px;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.04);
+      user-select: none;
+    }
+    .bg-drop-zone:hover,
+    .bg-drop-zone.drag-over {
+      border-color: rgba(255, 255, 255, 0.55);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .bg-drop-zone.has-preview {
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+    .bg-drop-prompt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+      color: rgba(245, 245, 247, 0.42);
+      text-align: center;
+      padding: 28px 20px;
+    }
+    .bg-drop-prompt svg { opacity: 0.55; }
+    .bg-drop-prompt-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(245, 245, 247, 0.72);
+      margin-top: 4px;
+    }
+    .bg-drop-prompt-sub { font-size: 12px; }
+    .bg-preview-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+    .bg-modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .bg-modal-btns .modal-submit { flex: 1; margin-top: 0; }
+    .bg-modal-cancel {
+      flex: 1;
+      padding: 14px;
+      border-radius: 980px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: transparent;
+      color: rgba(245, 245, 247, 0.65);
+      font-size: 15px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .bg-modal-cancel:hover { background: rgba(255, 255, 255, 0.07); }
+
+    /* ================================================================
+       STYLE MODAL — font + color customization
+    ================================================================ */
+    .style-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .style-modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .style-modal-card {
+      background: #1c1c1e;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 22px;
+      width: min(460px, 100%);
+      padding: 28px 26px 24px;
+      transform: scale(0.95) translateY(12px);
+      transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+    .style-modal-backdrop.open .style-modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .sm-color-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sm-color-label {
+      font-size: 13px;
+      color: rgba(245, 245, 247, 0.55);
+      flex: 1;
+    }
+    .sm-color-input {
+      width: 44px;
+      height: 36px;
+      padding: 2px 3px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
     /* ================================================================
        RESPONSIVE
     ================================================================ */
@@ -705,20 +882,84 @@
       .modal-card { padding: 24px 18px 22px; }
       .modal-stat-row { grid-template-columns: 1fr; }
       .add-char-fab { bottom: 20px; right: 18px; }
+      /* Dropdown must not exceed the viewport height on small phones */
+      .mega-dropdown {
+        max-height: calc(100dvh - 52px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      /* Shorter drop zone on small screens */
+      .bg-drop-zone { min-height: 150px; }
+      /* Ensure modals don't overflow on narrow viewports */
+      .bg-modal-card, .style-modal-card { width: min(420px, 100%); }
     }
     @media (max-width: 380px) {
       .stats-grid { grid-template-columns: 1fr; }
       .dropdown-grid { grid-template-columns: 1fr 1fr; }
     }
+
+    /* ================================================================
+       TOUCH / POINTER INTERACTIONS
+       Phones have no hover — make interactive elements always reachable.
+    ================================================================ */
+    @media (hover: none) {
+      /* Left-edge edit buttons: always visible on touch, not hover-only */
+      .section-left-btns {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      /* Larger tap targets (44 × 44 px minimum recommended) */
+      .section-left-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 0 10px 10px 0;
+      }
+      /* Disable the hover-based section expand; Learn More still works */
+      .char-section:not(.panel-open):hover {
+        min-height: 62vh;
+      }
+      /* Dropdown: don't auto-open on hover, rely on click handler instead */
+      .nav-area.open .mega-dropdown {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .details-panel, .mega-dropdown, .section-bg,
       .char-section, .btn-primary, .btn-outline,
       .btn-collapse, .add-char-fab, .modal-backdrop,
       .modal-card, .bg-modal-backdrop, .bg-modal-card,
-      .bg-edit-btn { transition: none; animation: none; }
+      .style-modal-backdrop, .style-modal-card,
+      .section-left-btns, .section-left-btn { transition: none; animation: none; }
     }
   </style>
+<style id="custom-style-eren">
+  #eren .hero-title { color: #ffffff !important; }
+  #eren .hero-tagline { color: #ffffff !important; }
+  #eren .btn-primary  { background: #009688 !important; color: #ffffff !important; }
+  #eren .btn-outline  { color: #009688 !important; border-color: rgba(0,150,136,0.5) !important; }
+  #eren .btn-collapse { color: #009688 !important; border-color: rgba(0,150,136,0.5) !important; }
+</style>
+<script id="section-style-data-eren" type="application/json">{"font":"default","titleColor":"#ffffff","taglineColor":"#ffffff","accentColor":"#009688"}</script>
+<style id="custom-style-zuko">
+  #zuko .hero-title { color: #ffffff !important; }
+  #zuko .hero-tagline { color: #ffdca0 !important; }
+  #zuko .btn-primary  { background: #e53935 !important; color: #ffffff !important; }
+  #zuko .btn-outline  { color: #e53935 !important; border-color: rgba(229,57,53,0.5) !important; }
+  #zuko .btn-collapse { color: #e53935 !important; border-color: rgba(229,57,53,0.5) !important; }
+</style>
+<script id="section-style-data-zuko" type="application/json">{"font":"default","titleColor":"#ffffff","taglineColor":"#ffdca0","accentColor":"#e53935"}</script>
+<style id="custom-style-sasuke">
+  #sasuke.char-section .hero-title { color: #ffffff; }
+  #sasuke.char-section .hero-tagline { color: #c8b9f0; }
+  #sasuke.char-section .btn-primary  { background: #982abc; color: #ffffff; }
+  #sasuke.char-section .btn-outline  { color: #982abc; border-color: rgba(152,42,188,0.5); }
+  #sasuke.char-section .btn-collapse { color: #982abc; border-color: rgba(152,42,188,0.5); }
+</style>
+<script id="section-style-data-sasuke" type="application/json">{"font":"default","titleColor":"#ffffff","taglineColor":"#c8b9f0","accentColor":"#982abc"}</script>
 </head>
 <body>
 
@@ -728,11 +969,20 @@
   <div class="nav-area" id="nav-area">
     <nav class="site-nav" aria-label="Site navigation">
       <a href="#" class="nav-logo">Characters</a>
-      <button class="nav-trigger" id="nav-trigger"
-              aria-haspopup="true" aria-expanded="false"
-              aria-controls="mega-dropdown">
-        Browse <span class="nav-chevron" aria-hidden="true">⌄</span>
-      </button>
+      <div class="nav-right">
+        <button class="copy-link-btn" id="copy-link-btn" title="Copy local network URL">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="copy-link-label">Copy Link</span>
+        </button>
+        <button class="nav-trigger" id="nav-trigger"
+                aria-haspopup="true" aria-expanded="false"
+                aria-controls="mega-dropdown">
+          Browse <span class="nav-chevron" aria-hidden="true">⌄</span>
+        </button>
+      </div>
     </nav>
 
     <div class="mega-dropdown" id="mega-dropdown" role="navigation"
@@ -740,39 +990,31 @@
       <div class="dropdown-grid" id="dropdown-grid">
 
         <a class="dropdown-char" href="characters/batman.html">
-          <img class="dropdown-thumb"
-               src="https://imgur.com/KpUUBcT.jpeg"
-               alt="Batman" loading="lazy" decoding="async">
+          <img class="dropdown-thumb" src="/images/Batman/bg.jpg?t=7093" alt="batman" loading="lazy" decoding="async">
           <span class="dropdown-name">Batman</span>
           <span class="dropdown-sub">DC Comics</span>
         </a>
 
         <a class="dropdown-char" href="characters/sasuke.html">
-          <img class="dropdown-thumb"
-               src="https://i.imgur.com/uHXkjvE.jpeg"
-               alt="Sasuke" loading="lazy" decoding="async">
+          <img class="dropdown-thumb" src="/images/sasuke/bg.png" alt="sasuke" loading="lazy" decoding="async">
           <span class="dropdown-name">Sasuke</span>
           <span class="dropdown-sub">Naruto</span>
         </a>
 
         <a class="dropdown-char" href="characters/masterchief.html">
-          <img class="dropdown-thumb"
-               src="https://imgur.com/NG4uqLb.jpeg"
-               alt="Master Chief" loading="lazy" decoding="async">
+          <img class="dropdown-thumb" src="/images/masterchief/bg.jpg" alt="masterchief" loading="lazy" decoding="async">
           <span class="dropdown-name">Master Chief</span>
           <span class="dropdown-sub">Halo</span>
         </a>
 
         <a class="dropdown-char" href="characters/erenjager.html">
-          <img class="dropdown-thumb"
-               src="https://imgur.com/08VjfM8.jpeg"
-               alt="Eren Jaeger" loading="lazy" decoding="async">
+          <img class="dropdown-thumb" src="/images/erenjager/bg.png" alt="erenjager" loading="lazy" decoding="async">
           <span class="dropdown-name">Eren Jaeger</span>
           <span class="dropdown-sub">Attack on Titan</span>
         </a>
 
         <a class="dropdown-char" href="characters/zuko.html">
-          <div class="dropdown-thumb-placeholder" aria-hidden="true">🔥</div>
+          <img class="dropdown-thumb" src="/images/zuko/bg.jpg" alt="zuko" loading="lazy" decoding="async">
           <span class="dropdown-name">Zuko</span>
           <span class="dropdown-sub">Avatar: TLAB</span>
         </a>
@@ -788,14 +1030,18 @@
          BATMAN
     ================================================================ -->
     <section class="char-section" id="batman">
-      <div class="section-bg" style="background-image:url('https://imgur.com/KpUUBcT.jpeg')"></div>
+      <div class="section-bg" style="background-image:url('/images/Batman/bg.jpg?t=7093')"></div>
       <div class="section-overlay"></div>
-      <button class="bg-edit-btn" onclick="openBgModal('batman','batman')"
-              title="Change background image" aria-label="Change Batman background image">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
-        </svg>
-      </button>
+      <div class="section-left-btns">
+        <button class="section-left-btn" onclick="openBgModal('batman','batman')"
+                title="Change background image" aria-label="Change Batman background image">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
+        </button>
+        <button class="section-left-btn" onclick="openStyleModal('batman','batman')"
+                title="Style section" aria-label="Style Batman section">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </button>
+      </div>
       <div class="hero-content">
         <p class="hero-eyebrow">DC Comics &middot; 1939</p>
         <h1 class="hero-title">Batman</h1>
@@ -827,14 +1073,18 @@
          SASUKE
     ================================================================ -->
     <section class="char-section" id="sasuke">
-      <div class="section-bg" style="background-image:url('https://i.imgur.com/uHXkjvE.jpeg')"></div>
+      <div class="section-bg" style="background-image:url('/images/sasuke/bg.png')"></div>
       <div class="section-overlay"></div>
-      <button class="bg-edit-btn" onclick="openBgModal('sasuke','sasuke')"
-              title="Change background image" aria-label="Change Sasuke background image">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
-        </svg>
-      </button>
+      <div class="section-left-btns">
+        <button class="section-left-btn" onclick="openBgModal('sasuke','sasuke')"
+                title="Change background image" aria-label="Change Sasuke background image">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
+        </button>
+        <button class="section-left-btn" onclick="openStyleModal('sasuke','sasuke')"
+                title="Style section" aria-label="Style Sasuke section">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </button>
+      </div>
       <div class="hero-content">
         <p class="hero-eyebrow">Naruto &middot; Konohagakure</p>
         <h1 class="hero-title">Sasuke</h1>
@@ -866,14 +1116,18 @@
          MASTER CHIEF
     ================================================================ -->
     <section class="char-section" id="masterchief">
-      <div class="section-bg" style="background-image:url('https://imgur.com/NG4uqLb.jpeg')"></div>
+      <div class="section-bg" style="background-image:url('/images/masterchief/bg.jpg')"></div>
       <div class="section-overlay"></div>
-      <button class="bg-edit-btn" onclick="openBgModal('masterchief','masterchief')"
-              title="Change background image" aria-label="Change Master Chief background image">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
-        </svg>
-      </button>
+      <div class="section-left-btns">
+        <button class="section-left-btn" onclick="openBgModal('masterchief','masterchief')"
+                title="Change background image" aria-label="Change Master Chief background image">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
+        </button>
+        <button class="section-left-btn" onclick="openStyleModal('masterchief','masterchief')"
+                title="Style section" aria-label="Style Master Chief section">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </button>
+      </div>
       <div class="hero-content">
         <p class="hero-eyebrow">Halo &middot; UNSC</p>
         <h1 class="hero-title">Master Chief</h1>
@@ -905,12 +1159,18 @@
          EREN JAEGER  (light theme — no bg photo)
     ================================================================ -->
     <section class="char-section" id="eren">
-      <button class="bg-edit-btn" onclick="openBgModal('erenjager','eren')"
-              title="Change background image" aria-label="Change Eren background image">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
-        </svg>
-      </button>
+      <div class="section-bg" style="background-image:url('/images/erenjager/bg.png')"></div>
+      <div class="section-overlay"></div>
+      <div class="section-left-btns">
+        <button class="section-left-btn" onclick="openBgModal('erenjager','eren')"
+                title="Change background image" aria-label="Change Eren background image">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
+        </button>
+        <button class="section-left-btn" onclick="openStyleModal('erenjager','eren')"
+                title="Style section" aria-label="Style Eren section">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </button>
+      </div>
       <div class="hero-content">
         <p class="hero-eyebrow">Attack on Titan &middot; Paradis Island</p>
         <h1 class="hero-title">Eren Jaeger</h1>
@@ -942,12 +1202,18 @@
          ZUKO  (dark, no bg photo yet)
     ================================================================ -->
     <section class="char-section" id="zuko">
-      <button class="bg-edit-btn" onclick="openBgModal('zuko','zuko')"
-              title="Change background image" aria-label="Change Zuko background image">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
-        </svg>
-      </button>
+      <div class="section-bg" style="background-image:url('/images/zuko/bg.jpg')"></div>
+      <div class="section-overlay"></div>
+      <div class="section-left-btns">
+        <button class="section-left-btn" onclick="openBgModal('zuko','zuko')"
+                title="Change background image" aria-label="Change Zuko background image">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
+        </button>
+        <button class="section-left-btn" onclick="openStyleModal('zuko','zuko')"
+                title="Style section" aria-label="Style Zuko section">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </button>
+      </div>
       <div class="hero-content">
         <p class="hero-eyebrow">Avatar: The Last Airbender &middot; Fire Nation</p>
         <h1 class="hero-title">Zuko</h1>
@@ -1101,20 +1367,104 @@
         <span class="modal-title" id="bg-modal-title">Change Background</span>
         <button class="modal-close" onclick="closeBgModal()" aria-label="Close">✕</button>
       </div>
-      <form id="bg-edit-form" onsubmit="submitBgEdit(event)" autocomplete="off">
-        <input type="hidden" id="bg-char-slug">
-        <input type="hidden" id="bg-section-id">
-        <div class="form-row">
-          <label class="form-label" for="bg-file-input">New Background Image</label>
-          <input class="form-input" id="bg-file-input" type="file" accept="image/*" required>
+
+      <input type="hidden" id="bg-char-slug">
+      <input type="hidden" id="bg-section-id">
+      <input type="file" id="bg-file-input" accept="image/*" style="display:none">
+
+      <!-- Drop zone -->
+      <div class="bg-drop-zone" id="bg-drop-zone" role="button" tabindex="0"
+           aria-label="Drop image here or click to browse">
+        <div class="bg-drop-prompt" id="bg-drop-prompt">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
+          </svg>
+          <span class="bg-drop-prompt-text">Drop an image here</span>
+          <span class="bg-drop-prompt-sub">or click to browse files</span>
         </div>
-        <p class="modal-error" id="bg-modal-error" aria-live="polite"></p>
-        <button class="modal-submit" type="submit" id="bg-modal-submit">Upload &amp; Apply</button>
+        <img class="bg-preview-img" id="bg-preview-img" src="" alt="Preview" hidden>
+      </div>
+
+      <p class="modal-error" id="bg-modal-error" aria-live="polite"></p>
+      <div class="bg-modal-btns">
+        <button class="bg-modal-cancel" type="button" onclick="closeBgModal()">Cancel</button>
+        <button class="modal-submit" type="button" id="bg-modal-submit"
+                onclick="submitBgEdit()" disabled>Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       STYLE MODAL
+  ================================================================ -->
+  <div class="style-modal-backdrop" id="style-modal-backdrop" aria-modal="true" role="dialog"
+       aria-labelledby="sm-title">
+    <div class="style-modal-card">
+      <div class="modal-header">
+        <span class="modal-title" id="sm-title">Style Section</span>
+        <button class="modal-close" onclick="closeStyleModal()" aria-label="Close">✕</button>
+      </div>
+      <form id="style-edit-form" onsubmit="saveStyleChanges(event)" autocomplete="off">
+        <input type="hidden" id="sm-slug">
+        <input type="hidden" id="sm-section-id">
+
+        <div class="form-row">
+          <label class="form-label" for="sm-font">Font</label>
+          <select class="form-input" id="sm-font">
+            <option value="default">Default (System)</option>
+            <option value="inter">Inter — clean sans-serif</option>
+            <option value="playfair">Playfair Display — elegant serif</option>
+            <option value="merriweather">Merriweather — readable serif</option>
+            <option value="space-mono">Space Mono — monospace</option>
+            <option value="dancing">Dancing Script — handwritten</option>
+            <option value="bebas">Bebas Neue — bold display</option>
+            <option value="oswald">Oswald — condensed sans</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Title Color</label>
+          <div class="sm-color-row">
+            <input class="sm-color-input" id="sm-title-color" type="color">
+            <span class="sm-color-label">Large character name</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Tagline Color</label>
+          <div class="sm-color-row">
+            <input class="sm-color-input" id="sm-tagline-color" type="color">
+            <span class="sm-color-label">Subtitle / tagline text</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Accent / Button Color</label>
+          <div class="sm-color-row">
+            <input class="sm-color-input" id="sm-accent-color" type="color">
+            <span class="sm-color-label">Buttons and highlights</span>
+          </div>
+        </div>
+
+        <p class="modal-error" id="sm-error" aria-live="polite"></p>
+        <button class="modal-submit" type="submit" id="sm-submit">Save</button>
       </form>
     </div>
   </div>
 
   <script>
+    /* ================================================================
+       VIEW-ONLY FALLBACK — frontend redundancy layer
+       Runs if _IS_LOCAL was not injected by the server (e.g. wrong server),
+       or as a double-check that the class is present when needed.
+    ================================================================ */
+    (function () {
+      var isLocal = (typeof window._IS_LOCAL !== 'undefined')
+        ? window._IS_LOCAL
+        : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      if (!isLocal) document.documentElement.classList.add('view-only');
+    }());
+
     /* ================================================================
        EXPAND / COLLAPSE PANELS
     ================================================================ */
@@ -1149,8 +1499,20 @@
       function open()  { area.classList.add('open');    trigger.setAttribute('aria-expanded', 'true'); }
       function close() { area.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
 
+      // Hover — desktop only
       area.addEventListener('mouseenter', open);
       area.addEventListener('mouseleave', close);
+
+      // Click / tap toggle — works on both desktop and touch
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation(); // prevent the document click below from immediately closing
+        area.classList.contains('open') ? close() : open();
+      });
+
+      // Tap anywhere outside the nav to close (mobile)
+      document.addEventListener('click', function (e) {
+        if (!area.contains(e.target)) close();
+      });
 
       trigger.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -1159,6 +1521,49 @@
         }
         if (e.key === 'Escape') close();
       });
+    }());
+
+    /* ================================================================
+       COPY LINK BUTTON
+    ================================================================ */
+    (function () {
+      var btn   = document.getElementById('copy-link-btn');
+      var label = btn && btn.querySelector('.copy-link-label');
+      if (!btn) return;
+
+      btn.addEventListener('click', function () {
+        var url = (typeof window._NETWORK_URL !== 'undefined' && window._NETWORK_URL)
+                  ? window._NETWORK_URL
+                  : window.location.origin;
+
+        function showCopied() {
+          btn.classList.add('copied');
+          if (label) label.textContent = 'Copied!';
+          setTimeout(function () {
+            btn.classList.remove('copied');
+            if (label) label.textContent = 'Copy Link';
+          }, 2000);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(showCopied).catch(function () {
+            fallbackCopy(url, showCopied);
+          });
+        } else {
+          fallbackCopy(url, showCopied);
+        }
+      });
+
+      function fallbackCopy(text, cb) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try { document.execCommand('copy'); cb(); } catch (_) {}
+        document.body.removeChild(ta);
+      }
     }());
 
     /* ================================================================
@@ -1203,10 +1608,12 @@
       if (e.target === this) closeModal();
     });
 
-    // Close on Escape (handles both modals)
+    // Close on Escape (all modals)
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape') return;
-      if (document.getElementById('bg-modal-backdrop').classList.contains('open')) {
+      if (document.getElementById('style-modal-backdrop').classList.contains('open')) {
+        closeStyleModal(true); // true = revert preview
+      } else if (document.getElementById('bg-modal-backdrop').classList.contains('open')) {
         closeBgModal();
       } else if (document.getElementById('modal-backdrop').classList.contains('open')) {
         closeModal();
@@ -1436,22 +1843,305 @@
     }
 
     /* ================================================================
+       STYLE MODAL — font & colour customization
+    ================================================================ */
+
+    // Font catalogue — google: null means already available (no extra load)
+    var SECTION_FONTS = [
+      { id: 'default',      family: null,                          google: null },
+      { id: 'inter',        family: "'Inter', sans-serif",          google: null },
+      { id: 'playfair',     family: "'Playfair Display', serif",    google: 'Playfair+Display:wght@700;800' },
+      { id: 'merriweather', family: "'Merriweather', serif",        google: 'Merriweather:wght@700' },
+      { id: 'space-mono',   family: "'Space Mono', monospace",      google: 'Space+Mono:wght@400;700' },
+      { id: 'dancing',      family: "'Dancing Script', cursive",    google: 'Dancing+Script:wght@700' },
+      { id: 'bebas',        family: "'Bebas Neue', cursive",        google: 'Bebas+Neue' },
+      { id: 'oswald',       family: "'Oswald', sans-serif",         google: 'Oswald:wght@600;700' },
+    ];
+    var _loadedFonts = { default: true, inter: true };
+
+    function loadSectionFont(fontId) {
+      if (_loadedFonts[fontId]) return;
+      var font = SECTION_FONTS.find(function (f) { return f.id === fontId; });
+      if (font && font.google) {
+        var link = document.createElement('link');
+        link.rel  = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css2?family=' + font.google + '&display=swap';
+        document.head.appendChild(link);
+      }
+      _loadedFonts[fontId] = true;
+    }
+
+    function rgbToHex(rgb) {
+      var m = (rgb || '').match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+      if (!m) return '#ffffff';
+      return '#' + [m[1], m[2], m[3]].map(function (n) {
+        return parseInt(n, 10).toString(16).padStart(2, '0');
+      }).join('');
+    }
+
+    function contrastText(hex) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) hex = hex.split('').map(function (c) { return c + c; }).join('');
+      var r = parseInt(hex.slice(0, 2), 16);
+      var g = parseInt(hex.slice(2, 4), 16);
+      var b = parseInt(hex.slice(4, 6), 16);
+      return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.55 ? '#000000' : '#ffffff';
+    }
+
+    // Snapshot inline styles so we can revert on cancel
+    var _smOriginals = {};
+
+    function _captureStyleOriginals(sectionId) {
+      var s   = document.getElementById(sectionId);
+      if (!s) return;
+      var t   = s.querySelector('.hero-title');
+      var g   = s.querySelector('.hero-tagline');
+      var bp  = s.querySelector('.btn-primary');
+      var bo  = s.querySelector('.btn-outline');
+      _smOriginals = {
+        titleFont:     t  ? t.style.fontFamily  : '',
+        titleColor:    t  ? t.style.color        : '',
+        taglineColor:  g  ? g.style.color        : '',
+        btnBg:         bp ? bp.style.background  : '',
+        btnColor:      bp ? bp.style.color       : '',
+        outlineColor:  bo ? bo.style.color       : '',
+        outlineBorder: bo ? bo.style.borderColor : '',
+      };
+    }
+
+    function _revertStyleOriginals(sectionId) {
+      var s  = document.getElementById(sectionId);
+      if (!s) return;
+      var t  = s.querySelector('.hero-title');
+      var g  = s.querySelector('.hero-tagline');
+      var bp = s.querySelector('.btn-primary');
+      var bo = s.querySelector('.btn-outline');
+      if (t)  { t.style.fontFamily = _smOriginals.titleFont;    t.style.color = _smOriginals.titleColor; }
+      if (g)  { g.style.color = _smOriginals.taglineColor; }
+      if (bp) { bp.style.background = _smOriginals.btnBg; bp.style.color = _smOriginals.btnColor; }
+      if (bo) { bo.style.color = _smOriginals.outlineColor; bo.style.borderColor = _smOriginals.outlineBorder; }
+    }
+
+    function _applyStylePreview(sectionId, style) {
+      var s  = document.getElementById(sectionId);
+      if (!s) return;
+      var t  = s.querySelector('.hero-title');
+      var g  = s.querySelector('.hero-tagline');
+      var bp = s.querySelector('.btn-primary');
+      var bo = s.querySelector('.btn-outline');
+
+      var font = SECTION_FONTS.find(function (f) { return f.id === style.font; });
+      if (t) {
+        t.style.fontFamily = font && font.family ? font.family : '';
+        if (style.titleColor) t.style.color = style.titleColor;
+      }
+      if (g && style.taglineColor) g.style.color = style.taglineColor;
+      if (style.accentColor) {
+        var at   = contrastText(style.accentColor);
+        var half = hexToRgba(style.accentColor, 0.50);
+        if (bp) { bp.style.background = style.accentColor; bp.style.color = at; }
+        if (bo) { bo.style.color = style.accentColor; bo.style.borderColor = half; }
+      }
+    }
+
+    function _previewCurrentModal() {
+      var sectionId = document.getElementById('sm-section-id').value;
+      var fontId    = document.getElementById('sm-font').value;
+      loadSectionFont(fontId);
+      _applyStylePreview(sectionId, {
+        font:         fontId,
+        titleColor:   document.getElementById('sm-title-color').value,
+        taglineColor: document.getElementById('sm-tagline-color').value,
+        accentColor:  document.getElementById('sm-accent-color').value,
+      });
+    }
+
+    function openStyleModal(slug, sectionId) {
+      sectionId = sectionId || slug;
+      document.getElementById('sm-slug').value       = slug;
+      document.getElementById('sm-section-id').value = sectionId;
+
+      // Capture originals so cancel can revert
+      _captureStyleOriginals(sectionId);
+
+      // Pre-populate from saved data or computed fallback
+      var dataEl     = document.getElementById('section-style-data-' + sectionId);
+      var saved      = dataEl ? JSON.parse(dataEl.textContent || '{}') : {};
+      var section    = document.getElementById(sectionId);
+      var titleEl    = section && section.querySelector('.hero-title');
+      var taglineEl  = section && section.querySelector('.hero-tagline');
+      var btnPrimEl  = section && section.querySelector('.btn-primary');
+
+      document.getElementById('sm-font').value =
+        saved.font || 'default';
+      document.getElementById('sm-title-color').value =
+        saved.titleColor   || (titleEl   ? rgbToHex(getComputedStyle(titleEl).color)              : '#ffffff');
+      document.getElementById('sm-tagline-color').value =
+        saved.taglineColor || (taglineEl ? rgbToHex(getComputedStyle(taglineEl).color)            : '#aaaaaa');
+      document.getElementById('sm-accent-color').value =
+        saved.accentColor  || (btnPrimEl ? rgbToHex(getComputedStyle(btnPrimEl).backgroundColor)  : '#3b82f6');
+
+      document.getElementById('sm-error').textContent = '';
+      var btn = document.getElementById('sm-submit');
+      btn.disabled = false;
+      btn.textContent = 'Save';
+
+      document.getElementById('style-modal-backdrop').classList.add('open');
+    }
+
+    function closeStyleModal(revert) {
+      if (revert) {
+        _revertStyleOriginals(document.getElementById('sm-section-id').value);
+      }
+      document.getElementById('style-modal-backdrop').classList.remove('open');
+      document.getElementById('style-edit-form').reset();
+      document.getElementById('sm-error').textContent = '';
+    }
+
+    document.getElementById('style-modal-backdrop').addEventListener('click', function (e) {
+      if (e.target === this) closeStyleModal(true);
+    });
+
+    // Wire live-preview to all style inputs
+    ['sm-font', 'sm-title-color', 'sm-tagline-color', 'sm-accent-color'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', _previewCurrentModal);
+    });
+
+    async function saveStyleChanges(e) {
+      e.preventDefault();
+      var slug      = document.getElementById('sm-slug').value;
+      var sectionId = document.getElementById('sm-section-id').value;
+      var errorEl   = document.getElementById('sm-error');
+      var btn       = document.getElementById('sm-submit');
+
+      errorEl.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Saving\u2026';
+
+      var style = {
+        font:         document.getElementById('sm-font').value,
+        titleColor:   document.getElementById('sm-title-color').value,
+        taglineColor: document.getElementById('sm-tagline-color').value,
+        accentColor:  document.getElementById('sm-accent-color').value,
+      };
+
+      try {
+        var res = await fetch('/__set_style__', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ character: slug, sectionId: sectionId, sectionStyle: style }),
+        });
+        var data = await res.json();
+
+        if (!res.ok || !data.success) {
+          errorEl.textContent = data.error || 'Save failed.';
+          btn.disabled = false;
+          btn.textContent = 'Save';
+          return;
+        }
+
+        // Update or create the in-page data script so reopening shows saved values
+        var dataId = 'section-style-data-' + sectionId;
+        var dataEl = document.getElementById(dataId);
+        if (!dataEl) {
+          dataEl = document.createElement('script');
+          dataEl.id   = dataId;
+          dataEl.type = 'application/json';
+          document.head.appendChild(dataEl);
+        }
+        dataEl.textContent = JSON.stringify(style);
+
+        closeStyleModal(false); // keep the preview — it's now saved
+      } catch (err) {
+        errorEl.textContent = 'Network error \u2014 is the server running?';
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    }
+
+    /* ================================================================
        BG EDIT MODAL — open / close / submit
     ================================================================ */
+    var _bgPendingFile = null;
+
+    function _bgClearPreview() {
+      var img    = document.getElementById('bg-preview-img');
+      var zone   = document.getElementById('bg-drop-zone');
+      var prompt = document.getElementById('bg-drop-prompt');
+      if (img.src && img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+      img.src    = '';
+      img.hidden = true;
+      prompt.hidden = false;
+      zone.classList.remove('has-preview');
+      document.getElementById('bg-file-input').value = '';
+      _bgPendingFile = null;
+      var btn = document.getElementById('bg-modal-submit');
+      if (btn) { btn.disabled = true; btn.textContent = 'Save'; }
+    }
+
+    function _bgSetFile(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        document.getElementById('bg-modal-error').textContent = 'Please select an image file.';
+        return;
+      }
+      _bgPendingFile = file;
+      document.getElementById('bg-modal-error').textContent = '';
+
+      var img    = document.getElementById('bg-preview-img');
+      var zone   = document.getElementById('bg-drop-zone');
+      var prompt = document.getElementById('bg-drop-prompt');
+
+      // Revoke any previous blob URL
+      if (img.src && img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+
+      img.src    = URL.createObjectURL(file);
+      img.hidden = false;
+      prompt.hidden = true;
+      zone.classList.add('has-preview');
+
+      document.getElementById('bg-modal-submit').disabled = false;
+    }
+
+    // Wire drop zone interactions once DOM is ready
+    (function () {
+      var zone      = document.getElementById('bg-drop-zone');
+      var fileInput = document.getElementById('bg-file-input');
+
+      zone.addEventListener('click', function () { fileInput.click(); });
+      zone.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+      });
+
+      zone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        zone.classList.add('drag-over');
+      });
+      zone.addEventListener('dragleave', function (e) {
+        if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over');
+      });
+      zone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        var file = e.dataTransfer.files[0];
+        if (file) _bgSetFile(file);
+      });
+
+      fileInput.addEventListener('change', function () {
+        if (fileInput.files[0]) _bgSetFile(fileInput.files[0]);
+      });
+    }());
+
     function openBgModal(slug, sectionId) {
       document.getElementById('bg-char-slug').value  = slug;
       document.getElementById('bg-section-id').value = sectionId || slug;
-      document.getElementById('bg-file-input').value = '';
       document.getElementById('bg-modal-error').textContent = '';
-      var btn = document.getElementById('bg-modal-submit');
-      btn.disabled = false;
-      btn.textContent = 'Upload & Apply';
+      _bgClearPreview();
       document.getElementById('bg-modal-backdrop').classList.add('open');
     }
 
     function closeBgModal() {
       document.getElementById('bg-modal-backdrop').classList.remove('open');
-      document.getElementById('bg-edit-form').reset();
+      _bgClearPreview();
       document.getElementById('bg-modal-error').textContent = '';
     }
 
@@ -1459,11 +2149,10 @@
       if (e.target === this) closeBgModal();
     });
 
-    async function submitBgEdit(e) {
-      e.preventDefault();
+    async function submitBgEdit() {
       var slug      = document.getElementById('bg-char-slug').value;
       var sectionId = document.getElementById('bg-section-id').value;
-      var file      = document.getElementById('bg-file-input').files[0];
+      var file      = _bgPendingFile;
       var errorEl   = document.getElementById('bg-modal-error');
       var btn       = document.getElementById('bg-modal-submit');
 
@@ -1490,7 +2179,7 @@
         if (!res.ok || !data.success) {
           errorEl.textContent = data.error || 'Upload failed.';
           btn.disabled = false;
-          btn.textContent = 'Upload & Apply';
+          btn.textContent = 'Save';
           return;
         }
 
@@ -1500,12 +2189,10 @@
           var bg = section.querySelector('.section-bg');
           if (bg) {
             bg.style.backgroundImage = 'url(\'' + data.url + '\')';
-            // Restart Ken Burns animation
             bg.classList.remove('kb-play');
             void bg.offsetWidth;
             bg.classList.add('kb-play');
           } else {
-            // No bg div yet — create and insert before hero-content
             var heroContent = section.querySelector('.hero-content');
             var bgDiv = document.createElement('div');
             bgDiv.className = 'section-bg';
@@ -1532,11 +2219,8 @@
           newImg.alt = slug;
           newImg.loading = 'lazy';
           newImg.decoding = 'async';
-          if (oldThumb) {
-            oldThumb.replaceWith(newImg);
-          } else {
-            dropLink.prepend(newImg);
-          }
+          if (oldThumb) oldThumb.replaceWith(newImg);
+          else dropLink.prepend(newImg);
         }
 
         closeBgModal();
@@ -1544,7 +2228,7 @@
       } catch (err) {
         errorEl.textContent = 'Network error \u2014 is the server running?';
         btn.disabled = false;
-        btn.textContent = 'Upload & Apply';
+        btn.textContent = 'Save';
       }
     }
   </script>

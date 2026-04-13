@@ -4,48 +4,142 @@
   "eyebrow": "Naruto · Konohagakure",
   "tagline": "From vengeance to redemption.",
   "stats": [
-    { "label": "Full Name",  "value": "Uchiha Sasuke" },
-    { "label": "Clan",       "value": "Uchiha Clan" },
-    { "label": "Village",    "value": "Konohagakure" },
-    { "label": "Dōjutsu",   "value": "Sharingan · Rinnegan" },
-    { "label": "Title",      "value": "Supporting Kage" },
-    { "label": "Rival",      "value": "Naruto Uzumaki" }
+    {
+      "label": "Full Name",
+      "value": "Uchiha Sasuke"
+    },
+    {
+      "label": "Clan",
+      "value": "Uchiha Clan"
+    },
+    {
+      "label": "Village",
+      "value": "Konohagakure"
+    },
+    {
+      "label": "Dōjutsu",
+      "value": "Sharingan · Rinnegan"
+    },
+    {
+      "label": "Title",
+      "value": "Supporting Kage"
+    },
+    {
+      "label": "Rival",
+      "value": "Naruto Uzumaki"
+    }
   ],
   "bio": [
-    { "type": "paragraph", "text": "Sasuke Uchiha (うちはサスケ) is one of the last surviving members of Konohagakure's Uchiha clan. After his older brother, Itachi, slaughtered their clan, Sasuke made it his mission in life to avenge them by killing Itachi. He is added to Team 7 upon becoming a shinobi, and through competition with his rival and best friend, Naruto Uzumaki, Sasuke starts developing his skills but eventually grows dissatisfied with his progress. He defects from Konoha to acquire the strength needed to exact his revenge." },
-    { "type": "paragraph", "text": "His years of seeking vengeance and the actions that followed became increasingly demanding, irrational, and isolated from others, leading him to be branded as an international criminal. After learning the truth of his brother's sacrifice, later proving instrumental in ending the Fourth Shinobi World War, and being redeemed by Naruto, Sasuke decides to return to Konoha and dedicate his life to help protect the village, becoming referred to as the Supporting Kage." },
-    { "type": "paragraph", "text": "Sasuke is the second and youngest son of Mikoto and Fugaku Uchiha; they named him after Sasuke Sarutobi in the hopes that he would someday be just as strong a shinobi. Sasuke grew up in the shadow of his older brother, Itachi, a natural prodigy who many in the Uchiha clan and the village would constantly compare Sasuke to. Sasuke himself adored Itachi, never passing up an opportunity to spend time with him." },
-    { "type": "paragraph", "text": "After a long day of training, Sasuke returned home one night to find the streets littered with the bodies of the Uchiha. He rushed home, only to find Itachi standing over the bodies of their parents. Sasuke tried to solicit help and comfort from Itachi, who responded by using Tsukuyomi on him to torment him with visions of the massacre. Horrified, Sasuke pleaded for an explanation — Itachi replied it was to test his own power. Before leaving, Itachi encouraged Sasuke to hate him, to desire revenge, and to gain power from that hatred." },
-    { "type": "paragraph", "text": "Sasuke, now one of the last surviving Uchiha, was alone. He dedicated his life to vengeance, throwing himself into his studies at the Academy, making no efforts to form friendships. One of his classmates, Naruto, disliked Sasuke's cool personality and developed a one-sided rivalry in his pursuit to prove himself just as good. For his part, Sasuke thought little of Naruto — but would, at times, secretly smile at how hard Naruto worked because of him. Ironically, Naruto was the only person among his peers who truly understood Sasuke due to their similarly painful experiences." },
-    { "type": "heading", "text": "Abilities" },
-    { "type": "paragraph", "text": "Sasuke is recognised as a natural prodigy of the Uchiha clan, graduating at the top of his class in the Academy. He made a strong impression on Kakashi Hatake in the bell test, and could fight on par with strong shinobi such as Haku and Gaara in Part I. After Orochimaru's tutelage for three years, Sasuke becomes strong enough to fight and even pressure his brother, Itachi, as well as the Fourth Raikage." },
-    { "type": "paragraph", "text": "After acquiring Six Paths Chakra and the Rinnegan, he is compared to the Sage of Six Paths by Kurama, and was able to help fight against Madara as the Ten-Tails' jinchūriki. In his adulthood, his performance has shown no impediment despite losing his left arm, as he fought on par with Kinshiki Ōtsutsuki. Ultimately, he is regarded as a legendary shinobi with power equal to Naruto, who is recognised as the strongest shinobi in history." },
-    { "type": "heading", "text": "Sharingan" },
-    { "type": "paragraph", "text": "Sasuke first awakened his Sharingan on the night of the Uchiha Clan Downfall. His Sharingan is especially potent — Orochimaru noted that despite not being fully developed at the time, it was even stronger and greater in clarity than Itachi's. With the Sharingan, Sasuke can see the flow of chakra, accurately reproduce any movement he sees, track fast-moving objects, predict opponents' movement, and use Genjutsu: Sharingan for broad purposes such as distraction, interrogation, or placing targets under his control." },
-    { "type": "heading", "text": "Mangekyō Sharingan" },
-    { "type": "paragraph", "text": "Sasuke awakens his Mangekyō Sharingan after Itachi's death, once he comes to terms with the fact that Itachi did love him and was the single most significant relationship he had. Its design gives the appearance of three intersecting ellipses. After Sasuke's excessive usage of his Mangekyō almost completely deteriorates his eyesight, Sasuke had Obito transplant Itachi's eyes to gain the Eternal Mangekyō Sharingan — a rare straight tomoe type, granting him tremendous fluidity in movement." },
-    { "type": "paragraph", "text": "With either Mangekyō, Sasuke can use Amaterasu, igniting whatever he looks at with black flames that can burn anything. With his right Mangekyō, he can use Kagutsuchi to shape the flames into a variety of forms such as spikes to impale opponents. Having awakened the Mangekyō in both eyes, Sasuke can use Susanoo — a spectral warrior that protects him and acts on his behalf, culminating in a Complete Body Susanoo comparable in size and power to Naruto's Tailed Beast Mode." },
-    { "type": "heading", "text": "Rinnegan" },
-    { "type": "paragraph", "text": "After receiving half of Hagoromo Ōtsutsuki's chakra, Sasuke awakened a Rinnegan in his left eye, with three tomoe on each of its two innermost circles. The dōjutsu gives Sasuke the ability of pattern recognition, being able to help him analyse and decipher codes. It also grants him access to the various abilities of the Six Paths Techniques, such as forcibly attracting others towards him, trapping individuals in Chibaku Tensei, and absorbing chakra through the Preta Path." },
-    { "type": "heading", "text": "Intelligence" },
-    { "type": "paragraph", "text": "Sasuke is very intelligent, having earned the best grades in his Academy class. In combat, while usually offensive without pause, Sasuke is very observant — mindful of all factors as he goes and analysing his opponents' techniques to understand their mechanics and purposes. He is accordingly accustomed to coming up with tactics on the fly, choosing whatever approach will be most successful at the exact moment. His strategies have earned praise for their analytical quality from Minato Namikaze and Madara Uchiha alike." }
+    {
+      "type": "paragraph",
+      "text": "Sasuke Uchiha (うちはサスケ) is one of the last surviving members of Konohagakure's Uchiha clan. After his older brother, Itachi, slaughtered their clan, Sasuke made it his mission in life to avenge them by killing Itachi. He is added to Team 7 upon becoming a shinobi, and through competition with his rival and best friend, Naruto Uzumaki, Sasuke starts developing his skills but eventually grows dissatisfied with his progress. He defects from Konoha to acquire the strength needed to exact his revenge."
+    },
+    {
+      "type": "paragraph",
+      "text": "His years of seeking vengeance and the actions that followed became increasingly demanding, irrational, and isolated from others, leading him to be branded as an international criminal. After learning the truth of his brother's sacrifice, later proving instrumental in ending the Fourth Shinobi World War, and being redeemed by Naruto, Sasuke decides to return to Konoha and dedicate his life to help protect the village, becoming referred to as the Supporting Kage."
+    },
+    {
+      "type": "paragraph",
+      "text": "Sasuke is the second and youngest son of Mikoto and Fugaku Uchiha; they named him after Sasuke Sarutobi in the hopes that he would someday be just as strong a shinobi. Sasuke grew up in the shadow of his older brother, Itachi, a natural prodigy who many in the Uchiha clan and the village would constantly compare Sasuke to. Sasuke himself adored Itachi, never passing up an opportunity to spend time with him."
+    },
+    {
+      "type": "paragraph",
+      "text": "After a long day of training, Sasuke returned home one night to find the streets littered with the bodies of the Uchiha. He rushed home, only to find Itachi standing over the bodies of their parents. Sasuke tried to solicit help and comfort from Itachi, who responded by using Tsukuyomi on him to torment him with visions of the massacre. Horrified, Sasuke pleaded for an explanation — Itachi replied it was to test his own power. Before leaving, Itachi encouraged Sasuke to hate him, to desire revenge, and to gain power from that hatred."
+    },
+    {
+      "type": "paragraph",
+      "text": "Sasuke, now one of the last surviving Uchiha, was alone. He dedicated his life to vengeance, throwing himself into his studies at the Academy, making no efforts to form friendships. One of his classmates, Naruto, disliked Sasuke's cool personality and developed a one-sided rivalry in his pursuit to prove himself just as good. For his part, Sasuke thought little of Naruto — but would, at times, secretly smile at how hard Naruto worked because of him. Ironically, Naruto was the only person among his peers who truly understood Sasuke due to their similarly painful experiences."
+    },
+    {
+      "type": "heading",
+      "text": "Abilities"
+    },
+    {
+      "type": "paragraph",
+      "text": "Sasuke is recognised as a natural prodigy of the Uchiha clan, graduating at the top of his class in the Academy. He made a strong impression on Kakashi Hatake in the bell test, and could fight on par with strong shinobi such as Haku and Gaara in Part I. After Orochimaru's tutelage for three years, Sasuke becomes strong enough to fight and even pressure his brother, Itachi, as well as the Fourth Raikage."
+    },
+    {
+      "type": "paragraph",
+      "text": "After acquiring Six Paths Chakra and the Rinnegan, he is compared to the Sage of Six Paths by Kurama, and was able to help fight against Madara as the Ten-Tails' jinchūriki. In his adulthood, his performance has shown no impediment despite losing his left arm, as he fought on par with Kinshiki Ōtsutsuki. Ultimately, he is regarded as a legendary shinobi with power equal to Naruto, who is recognised as the strongest shinobi in history."
+    },
+    {
+      "type": "heading",
+      "text": "Sharingan"
+    },
+    {
+      "type": "paragraph",
+      "text": "Sasuke first awakened his Sharingan on the night of the Uchiha Clan Downfall. His Sharingan is especially potent — Orochimaru noted that despite not being fully developed at the time, it was even stronger and greater in clarity than Itachi's. With the Sharingan, Sasuke can see the flow of chakra, accurately reproduce any movement he sees, track fast-moving objects, predict opponents' movement, and use Genjutsu: Sharingan for broad purposes such as distraction, interrogation, or placing targets under his control."
+    },
+    {
+      "type": "heading",
+      "text": "Mangekyō Sharingan"
+    },
+    {
+      "type": "paragraph",
+      "text": "Sasuke awakens his Mangekyō Sharingan after Itachi's death, once he comes to terms with the fact that Itachi did love him and was the single most significant relationship he had. Its design gives the appearance of three intersecting ellipses. After Sasuke's excessive usage of his Mangekyō almost completely deteriorates his eyesight, Sasuke had Obito transplant Itachi's eyes to gain the Eternal Mangekyō Sharingan — a rare straight tomoe type, granting him tremendous fluidity in movement."
+    },
+    {
+      "type": "paragraph",
+      "text": "With either Mangekyō, Sasuke can use Amaterasu, igniting whatever he looks at with black flames that can burn anything. With his right Mangekyō, he can use Kagutsuchi to shape the flames into a variety of forms such as spikes to impale opponents. Having awakened the Mangekyō in both eyes, Sasuke can use Susanoo — a spectral warrior that protects him and acts on his behalf, culminating in a Complete Body Susanoo comparable in size and power to Naruto's Tailed Beast Mode."
+    },
+    {
+      "type": "heading",
+      "text": "Rinnegan"
+    },
+    {
+      "type": "paragraph",
+      "text": "After receiving half of Hagoromo Ōtsutsuki's chakra, Sasuke awakened a Rinnegan in his left eye, with three tomoe on each of its two innermost circles. The dōjutsu gives Sasuke the ability of pattern recognition, being able to help him analyse and decipher codes. It also grants him access to the various abilities of the Six Paths Techniques, such as forcibly attracting others towards him, trapping individuals in Chibaku Tensei, and absorbing chakra through the Preta Path."
+    },
+    {
+      "type": "heading",
+      "text": "Intelligence"
+    },
+    {
+      "type": "paragraph",
+      "text": "Sasuke is very intelligent, having earned the best grades in his Academy class. In combat, while usually offensive without pause, Sasuke is very observant — mindful of all factors as he goes and analysing his opponents' techniques to understand their mechanics and purposes. He is accordingly accustomed to coming up with tactics on the fly, choosing whatever approach will be most successful at the exact moment. His strategies have earned praise for their analytical quality from Minato Namikaze and Madara Uchiha alike."
+    }
   ],
   "images": [
-    { "src": "https://i.imgur.com/uHXkjvE.jpeg", "alt": "Sasuke Uchiha" },
-    { "src": "https://i.imgur.com/EsyZqTc.jpeg", "alt": "Sasuke Reflection" },
-    { "src": "https://i.imgur.com/rZ8WweL.jpeg", "alt": "Uchiha Massacre" },
-    { "src": "https://i.imgur.com/N7LvEqH.jpeg", "alt": "Sasuke Rivalry" },
-    { "src": "https://i.imgur.com/WdeXo4J.jpeg", "alt": "Sharingan" },
-    { "src": "https://i.imgur.com/Hb3Sevw.jpeg", "alt": "Mangekyō Sharingan" }
+    {
+      "src": "https://i.imgur.com/uHXkjvE.jpeg",
+      "alt": "Sasuke Uchiha"
+    },
+    {
+      "src": "https://i.imgur.com/EsyZqTc.jpeg",
+      "alt": "Sasuke Reflection"
+    },
+    {
+      "src": "https://i.imgur.com/rZ8WweL.jpeg",
+      "alt": "Uchiha Massacre"
+    },
+    {
+      "src": "https://i.imgur.com/N7LvEqH.jpeg",
+      "alt": "Sasuke Rivalry"
+    },
+    {
+      "src": "https://i.imgur.com/WdeXo4J.jpeg",
+      "alt": "Sharingan"
+    },
+    {
+      "src": "https://i.imgur.com/Hb3Sevw.jpeg",
+      "alt": "Mangekyō Sharingan"
+    }
   ],
   "theme": {
-    "accent":     "#b39ddb",
+    "accent": "#b39ddb",
     "accentText": "#ffffff",
     "accentGlow": "rgba(124,58,237,0.10)",
-    "bg":         "#0c0816",
-    "surface":    "rgba(255,255,255,0.04)",
-    "border":     "rgba(255,255,255,0.08)",
-    "text":       "#f0eeff",
-    "textMuted":  "rgba(200,185,240,0.60)"
+    "bg": "#0c0816",
+    "surface": "rgba(255,255,255,0.04)",
+    "border": "rgba(255,255,255,0.08)",
+    "text": "#f0eeff",
+    "textMuted": "rgba(200,185,240,0.60)"
+  },
+  "bgImage": "/images/sasuke/bg.png",
+  "sectionStyle": {
+    "font": "default",
+    "titleColor": "#ffffff",
+    "taglineColor": "#c8b9f0",
+    "accentColor": "#982abc"
   }
 }

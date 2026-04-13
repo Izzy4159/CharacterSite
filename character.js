@@ -5,6 +5,22 @@
 (function () {
   'use strict';
 
+  // ── View-only mode: frontend fallback ────────────────────────────
+  // The server already injects window._IS_LOCAL and adds the view-only
+  // class to <html> before the page paints. This is a redundancy check
+  // in case the page is served by a different server or the injection fails.
+  (function () {
+    var isLocal = (typeof window._IS_LOCAL !== 'undefined')
+      ? window._IS_LOCAL
+      : (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+    if (!isLocal) document.documentElement.classList.add('view-only');
+  }());
+
+  // Helper — true when edit controls are permitted
+  function _editAllowed() {
+    return !document.documentElement.classList.contains('view-only');
+  }
+
   // ── Derive character slug from the page filename ──────────────────
   // e.g.  /characters/batman.html  →  "batman"
   const CHARACTER = location.pathname.split('/').pop().replace('.html', '');
@@ -154,6 +170,7 @@
   // EDIT MODE
   // ─────────────────────────────────────────────────────────────────
   function toggleEdit() {
+    if (!_editAllowed()) return;
     isEditing = !isEditing;
     document.body.classList.toggle('edit-mode', isEditing);
 
@@ -183,6 +200,7 @@
   // SAVE  — collect DOM state → POST /__save__
   // ─────────────────────────────────────────────────────────────────
   async function saveData() {
+    if (!_editAllowed()) return;
     // Collect editable text fields
     pageData.eyebrow = (document.getElementById('char-eyebrow') || {}).textContent.trim();
     pageData.title   = (document.getElementById('char-title')   || {}).textContent.trim();
@@ -235,6 +253,7 @@
   }
 
   function uploadFile(file) {
+    if (!_editAllowed()) return;
     const reader = new FileReader();
     reader.onload = async function (e) {
       try {

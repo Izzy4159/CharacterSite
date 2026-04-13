@@ -2,6 +2,7 @@ import http.server
 import socketserver
 import webbrowser
 import os
+import socket
 import json
 import base64
 import re
@@ -86,6 +87,16 @@ CHARACTER_PAGE_TEMPLATE = """\
 </html>
 """
 
+def local_ip():
+    """Return the machine's LAN IP, or 127.0.0.1 as a fallback."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(("8.8.8.8", 80))
+            return s.getsockname()[0]
+    except Exception:
+        return "127.0.0.1"
+
+
 def project_root():
     return os.path.dirname(os.path.abspath(__file__))
 
@@ -161,6 +172,9 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
         elif path == "/__set_bg__":
             self._handle_set_bg()
 
+        elif path == "/__set_style__":
+            self._handle_set_style()
+
         else:
             self.send_error(404, "Not found")
 
@@ -200,12 +214,13 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
                 self._json_error(400, "Invalid character name")
                 return
 
+            img_folder = self._image_folder(character)
             filename = re.sub(r'[^\w\-.]', '_', filename) or "photo.jpg"
             if "," in b64data:
                 b64data = b64data.split(",", 1)[1]
             raw_bytes = base64.b64decode(b64data + "==")
 
-            img_dir = os.path.join("images", character)
+            img_dir = os.path.join("images", img_folder)
             os.makedirs(img_dir, exist_ok=True)
 
             base_name, ext = os.path.splitext(filename)
@@ -218,7 +233,7 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
             with open(out_path, "wb") as f:
                 f.write(raw_bytes)
 
-            url = "/images/{}/{}".format(character, os.path.basename(out_path))
+            url = "/images/{}/{}".format(img_folder, os.path.basename(out_path))
             self._json_ok({"success": True, "url": url})
         except Exception as e:
             self._json_error(500, str(e))
@@ -235,17 +250,26 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
                 self._json_error(400, "Character name is required")
                 return
 
-            # Derive URL-safe slug from title
+            # Derive URL-safe slug from title (no separators, for filenames/IDs)
             slug = re.sub(r'[^a-z0-9]', '', title.lower())
             if not slug:
                 self._json_error(400, "Title must contain at least one letter or digit")
                 return
+
+            # Image folder name: lowercase with hyphens (e.g. "Master Chief" → "master-chief")
+            folder_name = re.sub(r'\s+', '-', title.lower().strip())
+            folder_name = re.sub(r'[^a-z0-9-]', '', folder_name)
+            folder_name = re.sub(r'-+', '-', folder_name).strip('-') or slug
 
             html_path = os.path.join(CHARACTER_DIR, f"{slug}.html")
             json_path = os.path.join("data", f"{slug}.json")
             if os.path.exists(html_path) or os.path.exists(json_path):
                 self._json_error(409, f"A character with the slug '{slug}' already exists")
                 return
+
+            # Always ensure the image folder exists
+            img_dir = os.path.join("images", folder_name)
+            os.makedirs(img_dir, exist_ok=True)
 
             # Save background image if provided
             bg_url = ""
@@ -255,8 +279,6 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
                 if "," in bg_data:
                     bg_data = bg_data.split(",", 1)[1]
                 raw_bytes = base64.b64decode(bg_data + "==")
-                img_dir = os.path.join("images", slug)
-                os.makedirs(img_dir, exist_ok=True)
                 out_path = os.path.join(img_dir, bg_filename)
                 counter = 1
                 base_n, ext_n = os.path.splitext(bg_filename)
@@ -265,22 +287,23 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
                     counter += 1
                 with open(out_path, "wb") as f:
                     f.write(raw_bytes)
-                bg_url = f"/images/{slug}/{os.path.basename(out_path)}"
+                bg_url = f"/images/{folder_name}/{os.path.basename(out_path)}"
 
             # Build theme from accent color
-            accent     = data.get("accent") or "#3b82f6"
+            accent      = data.get("accent") or "#3b82f6"
             accent_text = self._contrast_text(accent)
             accent_glow = self._hex_to_rgba(accent, 0.10)
 
             char_json = {
-                "character": slug,
-                "title":     title,
-                "eyebrow":   (data.get("eyebrow") or "").strip(),
-                "tagline":   (data.get("tagline") or "").strip(),
-                "bgImage":   bg_url,
-                "stats":     data.get("stats") or [],
-                "bio":       data.get("bio") or [],
-                "images":    ([{"src": bg_url, "alt": title}] if bg_url else []),
+                "character":   slug,
+                "imageFolder": folder_name,
+                "title":       title,
+                "eyebrow":     (data.get("eyebrow") or "").strip(),
+                "tagline":     (data.get("tagline") or "").strip(),
+                "bgImage":     bg_url,
+                "stats":       data.get("stats") or [],
+                "bio":         data.get("bio") or [],
+                "images":      ([{"src": bg_url, "alt": title}] if bg_url else []),
                 "theme": {
                     "accent":     accent,
                     "accentText": accent_text,
@@ -345,15 +368,18 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
                 b64data = b64data.split(",", 1)[1]
             raw_bytes = base64.b64decode(b64data + "==")
 
-            img_dir = os.path.join("images", character)
+            img_folder = self._image_folder(character)
+            img_dir = os.path.join("images", img_folder)
             os.makedirs(img_dir, exist_ok=True)
             out_path = os.path.join(img_dir, bg_filename)
             with open(out_path, "wb") as f:
                 f.write(raw_bytes)
 
-            bg_url = f"/images/{character}/{bg_filename}"
+            bg_url = f"/images/{img_folder}/{bg_filename}"
+            ts = int(monotonic())
+            bg_url_busted = f"{bg_url}?t={ts}"
 
-            # Update data/<character>.json
+            # Update data/<character>.json (store clean URL without timestamp)
             json_path = os.path.join("data", f"{character}.json")
             if os.path.exists(json_path):
                 with open(json_path, "r", encoding="utf-8") as f:
@@ -362,17 +388,19 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
                 with open(json_path, "w", encoding="utf-8") as f:
                     json.dump(char_data, f, indent=2, ensure_ascii=False)
 
-            # Patch index.html — section uses section_id, dropdown uses character slug
+            # Patch index.html with cache-busted URL so the browser always
+            # fetches the new image even when the filename (bg.jpg) stays the same
             index_path = "index.html"
             if os.path.exists(index_path):
                 with open(index_path, "r", encoding="utf-8") as f:
                     content = f.read()
-                content = self._patch_section_bg_url(content, section_id, bg_url)
-                content = self._patch_dropdown_bg_url(content, character, bg_url)
+                content = self._patch_section_bg_url(content, section_id, bg_url_busted)
+                content = self._patch_dropdown_bg_url(content, character, bg_url_busted)
                 with open(index_path, "w", encoding="utf-8") as f:
                     f.write(content)
 
-            self._json_ok({"success": True, "url": bg_url})
+            self._json_ok({"success": True, "url": bg_url_busted})
+
         except Exception as e:
             self._json_error(500, str(e))
 
@@ -439,6 +467,154 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
             flags=re.DOTALL,
         )
         content = content[:link_m.start(2)] + inner_new + content[link_m.end(2):]
+        return content
+
+    # ── Set section style (font + colours) ──────────────────────────
+    def _handle_set_style(self):
+        try:
+            length = int(self.headers.get("Content-Length", "0") or 0)
+            raw = self.rfile.read(length) if length else b"{}"
+            data = json.loads(raw.decode("utf-8"))
+
+            character  = data.get("character", "").lower().strip()
+            section_id = data.get("sectionId", character).lower().strip() or character
+            raw_style  = data.get("sectionStyle", {})
+
+            if not character or not re.match(r'^[a-z0-9_-]+$', character):
+                self._json_error(400, "Invalid character name")
+                return
+
+            ALLOWED_FONTS = {
+                'default', 'inter', 'playfair', 'merriweather',
+                'space-mono', 'dancing', 'bebas', 'oswald',
+            }
+            font = raw_style.get("font", "default")
+            if font not in ALLOWED_FONTS:
+                font = "default"
+
+            def _valid_color(c):
+                return bool(re.match(
+                    r'^#[0-9a-fA-F]{3,8}$|^rgba?\(', (c or "").strip()
+                ))
+
+            clean = {"font": font}
+            for key in ("titleColor", "taglineColor", "accentColor"):
+                val = raw_style.get(key, "")
+                if _valid_color(val):
+                    clean[key] = val.strip()
+
+            # Persist to JSON
+            json_path = os.path.join("data", f"{character}.json")
+            if os.path.exists(json_path):
+                with open(json_path, "r", encoding="utf-8") as f:
+                    char_data = json.load(f)
+                char_data["sectionStyle"] = clean
+                with open(json_path, "w", encoding="utf-8") as f:
+                    json.dump(char_data, f, indent=2, ensure_ascii=False)
+
+            # Patch index.html
+            css        = self._build_custom_style_css(section_id, clean)
+            style_json = json.dumps(clean, separators=(',', ':'))
+            index_path = "index.html"
+            if os.path.exists(index_path):
+                with open(index_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                content = self._patch_custom_style_html(content, section_id, css, style_json)
+                with open(index_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+
+            self._json_ok({"success": True})
+        except Exception as e:
+            self._json_error(500, str(e))
+
+    # ── Look up a character's image folder (backward-compat) ─────────
+    def _image_folder(self, character):
+        """Return imageFolder from JSON if set, else fall back to slug."""
+        try:
+            jp = os.path.join("data", f"{character}.json")
+            if os.path.exists(jp):
+                with open(jp, "r", encoding="utf-8") as f:
+                    return json.load(f).get("imageFolder", character)
+        except Exception:
+            pass
+        return character
+
+    # ── Build per-section custom <style> CSS ─────────────────────────
+    @staticmethod
+    def _build_custom_style_css(section_id, style):
+        FAMILIES = {
+            'inter':        "'Inter', sans-serif",
+            'playfair':     "'Playfair Display', serif",
+            'merriweather': "'Merriweather', serif",
+            'space-mono':   "'Space Mono', monospace",
+            'dancing':      "'Dancing Script', cursive",
+            'bebas':        "'Bebas Neue', cursive",
+            'oswald':       "'Oswald', sans-serif",
+        }
+        # Use #{id}.char-section to gain one extra class in specificity.
+        # This beats the base #{id} rules (0,1,1,0 → 0,1,2,0) WITHOUT
+        # needing !important.  Keeping !important out is essential: inline
+        # styles set during live preview must be able to override the CSS
+        # (inline beats any stylesheet rule, but NOT !important in a sheet).
+        sel = f"#{section_id}.char-section"
+        rules = []
+        font = style.get("font", "default")
+        if font != "default" and font in FAMILIES:
+            rules.append(
+                f"  {sel} .hero-title"
+                f" {{ font-family: {FAMILIES[font]}; }}"
+            )
+        if tc := style.get("titleColor"):
+            rules.append(f"  {sel} .hero-title {{ color: {tc}; }}")
+        if gc := style.get("taglineColor"):
+            rules.append(f"  {sel} .hero-tagline {{ color: {gc}; }}")
+        if ac := style.get("accentColor"):
+            at = ShutdownableHandler._contrast_text(ac)
+            try:
+                half = ShutdownableHandler._hex_to_rgba(ac, 0.50)
+            except Exception:
+                half = ac
+            rules += [
+                f"  {sel} .btn-primary  {{ background: {ac}; color: {at}; }}",
+                f"  {sel} .btn-outline  {{ color: {ac}; border-color: {half}; }}",
+                f"  {sel} .btn-collapse {{ color: {ac}; border-color: {half}; }}",
+            ]
+        return "\n".join(rules)
+
+    # ── Patch / insert custom-style + data blocks in index.html ──────
+    @staticmethod
+    def _patch_custom_style_html(content, section_id, css, style_json):
+        sid = re.escape(section_id)
+
+        style_pat = re.compile(
+            r'<style id="custom-style-' + sid + r'"[^>]*>.*?</style>',
+            re.DOTALL,
+        )
+        data_pat = re.compile(
+            r'<script id="section-style-data-' + sid + r'"[^>]*>.*?</script>',
+            re.DOTALL,
+        )
+
+        new_style = (
+            f'<style id="custom-style-{section_id}">\n{css}\n</style>'
+            if css else
+            f'<style id="custom-style-{section_id}"></style>'
+        )
+        new_data = (
+            f'<script id="section-style-data-{section_id}" type="application/json">'
+            f'{style_json}</script>'
+        )
+
+        if style_pat.search(content):
+            content = style_pat.sub(new_style, content, count=1)
+        else:
+            content = content.replace("</head>", new_style + "\n</head>", 1)
+
+        if data_pat.search(content):
+            content = data_pat.sub(new_data, content, count=1)
+        else:
+            content = content.replace("</head>", new_data + "\n</head>", 1)
+
         return content
 
     # ── Patch index.html: inject style + section + dropdown entry ────
@@ -530,11 +706,32 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
             for b in bio_paras
         )
 
+        cam_svg = (
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+            '<path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z'
+            'M8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>'
+        )
+        pal_svg = (
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+            '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74'
+            '-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5'
+            ' 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5'
+            ' 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8'
+            ' 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5'
+            ' 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>'
+        )
+
         return f"""
     <!-- ================================================================
          {char.get('title','').upper()}  (added via Add Character)
     ================================================================ -->
     <section class="char-section" id="{slug}">{bg_divs}
+      <div class="section-left-btns">
+        <button class="section-left-btn" onclick="openBgModal('{slug}','{slug}')"
+                title="Change background image" aria-label="Change {title} background">{cam_svg}</button>
+        <button class="section-left-btn" onclick="openStyleModal('{slug}','{slug}')"
+                title="Style section" aria-label="Style {title} section">{pal_svg}</button>
+      </div>
       <div class="hero-content">
         <p class="hero-eyebrow">{eyebrow}</p>
         <h1 class="hero-title">{title}</h1>
@@ -607,6 +804,20 @@ class ShutdownableHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 with open(path, "r", encoding="utf-8") as f:
                     content = f.read()
+                # Inject globals: LAN URL + locality flag (used for view-only mode)
+                client_ip = self.client_address[0]
+                is_local = client_ip in ('127.0.0.1', '::1', 'localhost')
+                net_url = f"http://{local_ip()}:{PORT}"
+                js = (
+                    f'window._NETWORK_URL="{net_url}";'
+                    f'window._IS_LOCAL={str(is_local).lower()};'
+                )
+                if not is_local:
+                    # Apply view-only class before the page paints to avoid flash
+                    js += 'document.documentElement.classList.add("view-only");'
+                net_script = f'<script>{js}</script>'
+                if "</head>" in content:
+                    content = content.replace("</head>", net_script + "\n</head>", 1)
                 if "</body>" in content:
                     content = content.replace("</body>", HEARTBEAT_SNIPPET + "\n</body>")
                 else:
@@ -677,7 +888,10 @@ def main():
     os.makedirs(os.path.join(project_root(), "images"), exist_ok=True)
     os.makedirs(os.path.join(project_root(), "data"),   exist_ok=True)
 
-    print(f"🚀 Starting local server on http://localhost:{PORT}")
+    ip  = local_ip()
+    print(f"🚀 Starting local server...")
+    print(f"   Local:   http://localhost:{PORT}")
+    print(f"   Network: http://{ip}:{PORT}  ← share this link on your WiFi")
     httpd = serve(PORT)
 
     try:

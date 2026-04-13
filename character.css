@@ -100,12 +100,14 @@ body.edit-mode .edit-badge { display: block; }
 }
 
 .char-title {
-  font-size: clamp(60px, 10vw, 108px);
+  font-size: clamp(36px, 10vw, 108px);
   font-weight: 800;
   letter-spacing: -3px;
   line-height: 0.94;
   color: var(--text);
   margin-bottom: 22px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .char-tagline {
@@ -371,18 +373,37 @@ body.edit-mode .fab-save { display: inline-flex; }
 
 @media (max-width: 540px) {
   .char-hero   { min-height: 52vh; padding: 60px 16px 40px; }
-  .char-title  { letter-spacing: -2px; }
+  .char-title  { letter-spacing: -1px; }
+  .char-tagline { font-size: clamp(15px, 4vw, 20px); }
   .gallery-section { padding: 32px 10px 48px; }
   .gallery-grid { columns: 2 130px; column-gap: 6px; }
   .gallery-item { margin-bottom: 6px; }
   .info-section { padding: 40px 16px 60px; }
   .stats-grid   { grid-template-columns: 1fr 1fr; }
   .fab-group    { bottom: 20px; right: 16px; }
-  .toast        { right: 16px; bottom: 80px; }
+  .fab-edit     { width: 48px; height: 48px; }
+  .fab-save     { height: 40px; padding: 0 18px; font-size: 13px; }
+  .toast        { right: 16px; bottom: 76px; max-width: calc(100vw - 32px); }
 }
 
 @media (max-width: 380px) {
   .stats-grid { grid-template-columns: 1fr; }
+  .gallery-grid { columns: 1; }
+}
+
+/* Touch: make the gallery item hover scale effect tap-friendly via active state */
+@media (hover: none) {
+  .gallery-item:hover { transform: none; }
+  .gallery-item:active { transform: scale(1.015); }
+  /* Larger edit/delete button tap targets */
+  .delete-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+  /* Show add-photo button without edit mode on touch for discoverability? No —
+     keep it edit-mode-only, but ensure the label is a comfortable tap target */
+  .add-photo-btn { padding: 14px 32px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -391,4 +412,19 @@ body.edit-mode .fab-save { display: inline-flex; }
   .fab,
   [contenteditable],
   .toast { transition: none; }
+}
+
+/* ================================================================
+   VIEW-ONLY MODE — hide all edit controls for network visitors
+================================================================ */
+html.view-only .fab-edit,
+html.view-only .fab-save,
+html.view-only .add-photo-wrap,
+html.view-only .edit-badge { display: none !important; }
+
+/* Prevent edit-mode visual state even if body.edit-mode is somehow set */
+html.view-only body.edit-mode [contenteditable] {
+  cursor: default;
+  outline: none;
+  box-shadow: none;
 }

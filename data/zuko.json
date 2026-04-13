@@ -4,38 +4,105 @@
   "eyebrow": "Avatar: The Last Airbender · Fire Nation",
   "tagline": "Honor isn't given. It's earned.",
   "stats": [
-    { "label": "Title",   "value": "Fire Lord Zuko" },
-    { "label": "Nation",  "value": "Fire Nation" },
-    { "label": "Bending", "value": "Firebending" },
-    { "label": "Ability", "value": "Lightning Redirection" },
-    { "label": "Mentor",  "value": "Uncle Iroh" },
-    { "label": "Arc",     "value": "Antagonist → Hero" }
+    {
+      "label": "Title",
+      "value": "Fire Lord Zuko"
+    },
+    {
+      "label": "Nation",
+      "value": "Fire Nation"
+    },
+    {
+      "label": "Bending",
+      "value": "Firebending"
+    },
+    {
+      "label": "Ability",
+      "value": "Lightning Redirection"
+    },
+    {
+      "label": "Mentor",
+      "value": "Uncle Iroh"
+    },
+    {
+      "label": "Arc",
+      "value": "Antagonist → Hero"
+    }
   ],
   "bio": [
-    { "type": "paragraph", "text": "Prince Zuko is the crown prince of the Fire Nation and one of the most complex characters in Avatar: The Last Airbender. Born to Fire Lord Ozai and Princess Ursa, Zuko grew up in the shadow of his younger sister Azula — a prodigious firebender who seemed to effortlessly earn their father's praise while Zuko struggled for every scrap of approval. His relationship with his father was defined by expectation, distance, and eventually, cruelty." },
-    { "type": "paragraph", "text": "At the age of thirteen, Zuko spoke out of turn during a war council and was challenged to an Agni Kai by the general whose plan he had criticized. When Zuko refused to fight, believing he had been challenged by the general, he discovered it was his own father, Fire Lord Ozai, who stood across the circle. Unwilling to fight his father, Zuko knelt in submission — and Ozai burned his son's face, leaving a permanent scar. Zuko was then banished, told he could only return by capturing the Avatar, who had been missing for a hundred years." },
-    { "type": "heading", "text": "The Pursuit" },
-    { "type": "paragraph", "text": "For three years, Zuko pursued the Avatar across the world, accompanied only by his uncle Iroh — a former Fire Nation general, master firebender, and the closest thing to a father figure Zuko had ever known. Iroh offered wisdom, patience, and love at every turn, while Zuko rejected it all, fixated on the single goal that he believed would restore his honor and earn his father's love." },
-    { "type": "paragraph", "text": "The pursuit brought Zuko into conflict with Aang, Katara, Sokka, and their allies repeatedly. He captured Aang multiple times, only to be thwarted or forced to cooperate against greater threats. In Ba Sing Se, Zuko faced the defining choice of his journey: stand with Iroh and Aang to stop Azula's coup, or side with his sister and betray everything he had been slowly becoming. He chose Azula. He was welcomed home as a hero. And he was miserable." },
-    { "type": "heading", "text": "Redemption" },
-    { "type": "paragraph", "text": "Zuko's turn was not a single dramatic moment but a long, painful unraveling. Back in the Fire Nation, with his father's approval and his old life restored, Zuko realized that nothing felt right — that the honor he had chased for three years was hollow. Guided by letters from his mother, memories of his uncle, and the quiet voice of his own conscience, Zuko made the hardest decision of his life: to abandon everything he had and join the Avatar." },
-    { "type": "paragraph", "text": "He sought out each member of Team Avatar individually, offering his help and expecting nothing. He taught Aang firebending. He helped Sokka rescue his friends from prison. He accompanied Katara to confront the soldier who had killed her mother. These acts were not grand gestures — they were the slow, difficult work of earning trust that had every reason not to be given." },
-    { "type": "heading", "text": "Firebending & Combat" },
-    { "type": "paragraph", "text": "Zuko is one of the most skilled firebenders of his generation. Trained from childhood in the traditional Fire Nation style — aggressive, relentless, powered by rage — he initially drew his bending from anger and ambition. After training with the ancient Sun Warriors and the last surviving dragons, Ran and Shaw, Zuko and Aang rediscovered the true source of firebending: life and energy itself, not destruction." },
-    { "type": "paragraph", "text": "Zuko also learned to redirect lightning, a technique taught to him by Iroh and derived from waterbending philosophy — the idea of meeting force with redirection rather than resistance. He used this ability to deflect a lightning strike from Azula in the series finale, taking the bolt to protect Katara. The technique nearly killed him. He redirected it anyway." },
-    { "type": "heading", "text": "Fire Lord" },
-    { "type": "paragraph", "text": "After the defeat of Fire Lord Ozai, Zuko was crowned as the new Fire Lord — the leader of a nation that had spent a century waging war on the world. His reign was defined not by conquest but by reconciliation: dismantling the colonies, rebuilding diplomatic relationships, supporting reconstruction in the Earth Kingdom, and working alongside Avatar Aang to establish the foundations of lasting peace." },
-    { "type": "paragraph", "text": "Zuko's arc remains one of the most celebrated redemption stories in animated storytelling. What makes it endure is not the destination — the repentant villain becoming the good king — but the path. It is a story about a person who had every reason to become what his father wanted him to be, and chose, painfully and imperfectly, to become something else." }
+    {
+      "type": "paragraph",
+      "text": "Prince Zuko is the crown prince of the Fire Nation and one of the most complex characters in Avatar: The Last Airbender. Born to Fire Lord Ozai and Princess Ursa, Zuko grew up in the shadow of his younger sister Azula — a prodigious firebender who seemed to effortlessly earn their father's praise while Zuko struggled for every scrap of approval. His relationship with his father was defined by expectation, distance, and eventually, cruelty."
+    },
+    {
+      "type": "paragraph",
+      "text": "At the age of thirteen, Zuko spoke out of turn during a war council and was challenged to an Agni Kai by the general whose plan he had criticized. When Zuko refused to fight, believing he had been challenged by the general, he discovered it was his own father, Fire Lord Ozai, who stood across the circle. Unwilling to fight his father, Zuko knelt in submission — and Ozai burned his son's face, leaving a permanent scar. Zuko was then banished, told he could only return by capturing the Avatar, who had been missing for a hundred years."
+    },
+    {
+      "type": "heading",
+      "text": "The Pursuit"
+    },
+    {
+      "type": "paragraph",
+      "text": "For three years, Zuko pursued the Avatar across the world, accompanied only by his uncle Iroh — a former Fire Nation general, master firebender, and the closest thing to a father figure Zuko had ever known. Iroh offered wisdom, patience, and love at every turn, while Zuko rejected it all, fixated on the single goal that he believed would restore his honor and earn his father's love."
+    },
+    {
+      "type": "paragraph",
+      "text": "The pursuit brought Zuko into conflict with Aang, Katara, Sokka, and their allies repeatedly. He captured Aang multiple times, only to be thwarted or forced to cooperate against greater threats. In Ba Sing Se, Zuko faced the defining choice of his journey: stand with Iroh and Aang to stop Azula's coup, or side with his sister and betray everything he had been slowly becoming. He chose Azula. He was welcomed home as a hero. And he was miserable."
+    },
+    {
+      "type": "heading",
+      "text": "Redemption"
+    },
+    {
+      "type": "paragraph",
+      "text": "Zuko's turn was not a single dramatic moment but a long, painful unraveling. Back in the Fire Nation, with his father's approval and his old life restored, Zuko realized that nothing felt right — that the honor he had chased for three years was hollow. Guided by letters from his mother, memories of his uncle, and the quiet voice of his own conscience, Zuko made the hardest decision of his life: to abandon everything he had and join the Avatar."
+    },
+    {
+      "type": "paragraph",
+      "text": "He sought out each member of Team Avatar individually, offering his help and expecting nothing. He taught Aang firebending. He helped Sokka rescue his friends from prison. He accompanied Katara to confront the soldier who had killed her mother. These acts were not grand gestures — they were the slow, difficult work of earning trust that had every reason not to be given."
+    },
+    {
+      "type": "heading",
+      "text": "Firebending & Combat"
+    },
+    {
+      "type": "paragraph",
+      "text": "Zuko is one of the most skilled firebenders of his generation. Trained from childhood in the traditional Fire Nation style — aggressive, relentless, powered by rage — he initially drew his bending from anger and ambition. After training with the ancient Sun Warriors and the last surviving dragons, Ran and Shaw, Zuko and Aang rediscovered the true source of firebending: life and energy itself, not destruction."
+    },
+    {
+      "type": "paragraph",
+      "text": "Zuko also learned to redirect lightning, a technique taught to him by Iroh and derived from waterbending philosophy — the idea of meeting force with redirection rather than resistance. He used this ability to deflect a lightning strike from Azula in the series finale, taking the bolt to protect Katara. The technique nearly killed him. He redirected it anyway."
+    },
+    {
+      "type": "heading",
+      "text": "Fire Lord"
+    },
+    {
+      "type": "paragraph",
+      "text": "After the defeat of Fire Lord Ozai, Zuko was crowned as the new Fire Lord — the leader of a nation that had spent a century waging war on the world. His reign was defined not by conquest but by reconciliation: dismantling the colonies, rebuilding diplomatic relationships, supporting reconstruction in the Earth Kingdom, and working alongside Avatar Aang to establish the foundations of lasting peace."
+    },
+    {
+      "type": "paragraph",
+      "text": "Zuko's arc remains one of the most celebrated redemption stories in animated storytelling. What makes it endure is not the destination — the repentant villain becoming the good king — but the path. It is a story about a person who had every reason to become what his father wanted him to be, and chose, painfully and imperfectly, to become something else."
+    }
   ],
   "images": [],
   "theme": {
-    "accent":     "#ff8a00",
+    "accent": "#ff8a00",
     "accentText": "#ffffff",
     "accentGlow": "rgba(255,138,0,0.10)",
-    "bg":         "#120700",
-    "surface":    "rgba(255,255,255,0.05)",
-    "border":     "rgba(255,255,255,0.08)",
-    "text":       "#fff3e0",
-    "textMuted":  "rgba(255,224,178,0.60)"
-  }
+    "bg": "#120700",
+    "surface": "rgba(255,255,255,0.05)",
+    "border": "rgba(255,255,255,0.08)",
+    "text": "#fff3e0",
+    "textMuted": "rgba(255,224,178,0.60)"
+  },
+  "sectionStyle": {
+    "font": "default",
+    "titleColor": "#ffffff",
+    "taglineColor": "#ffdca0",
+    "accentColor": "#e53935"
+  },
+  "bgImage": "/images/zuko/bg.jpg"
 }
